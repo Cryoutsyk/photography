@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.ogzuser.mapper.OgzuserMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.ogzuser.model.Ogzuser">
+		INSERT INTO plt_ogz_user
+		(
+			DB_ID,
+			CODE,
+			NAME,
+			DISPLAY_NAME,
+			USER_PASSWORD,
+			ORG_DB_ID,
+			CREATED_DT,
+			VERSION,
+			STATUS,
+			TAB_INDEX,
+			APPLICATION_NAME
+		) 
+		VALUES 
+		( 
+			#{dbId, jdbcType=VARCHAR},
+			#{code, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{displayName, jdbcType=VARCHAR},
+			#{userPassword, jdbcType=VARCHAR},
+			#{orgDbId, jdbcType=VARCHAR},
+			#{createdDt, jdbcType=TIMESTAMP},
+			#{version, jdbcType=INTEGER},
+			#{status, jdbcType=INTEGER},
+			#{tabIndex, jdbcType=INTEGER},
+			#{applicationName, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.ogzuser.model.Ogzuser" >
+     	UPDATE plt_ogz_user
+			<set> 
+				<if test=" code != null" > 
+					CODE = #{code}, 
+				</if>
+				<if test=" name != null" > 
+					NAME = #{name}, 
+				</if>
+				<if test=" displayName != null" > 
+					DISPLAY_NAME = #{displayName}, 
+				</if>
+				<if test=" userPassword != null" > 
+					USER_PASSWORD = #{userPassword}, 
+				</if>
+				<if test=" orgDbId != null" > 
+					ORG_DB_ID = #{orgDbId}, 
+				</if>
+				<if test=" createdDt != null" > 
+					CREATED_DT = #{createdDt}, 
+				</if>
+				<if test=" version != null" > 
+					VERSION = #{version}, 
+				</if>
+				<if test=" status != null" > 
+					STATUS = #{status}, 
+				</if>
+				<if test=" tabIndex != null" > 
+					TAB_INDEX = #{tabIndex}, 
+				</if>
+				<if test=" applicationName != null" > 
+					APPLICATION_NAME = #{applicationName}, 
+				</if>
+			</set> 
+		 WHERE  DB_ID = #{dbId}
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.ogzuser.model.Ogzuser" >
+            DELETE FROM plt_ogz_user WHERE DB_ID IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	<sql id="selectAllColumns">
+		TB.DB_ID AS dbId,  
+		TB.CODE AS code,  
+		TB.NAME AS name,  
+		TB.DISPLAY_NAME AS displayName,  
+		TB.USER_PASSWORD AS userPassword,  
+		TB.ORG_DB_ID AS orgDbId,  
+		TB.CREATED_DT AS createdDt,  
+		TB.VERSION AS version,  
+		TB.STATUS AS status,  
+		TB.TAB_INDEX AS tabIndex,  
+		TB.APPLICATION_NAME AS applicationName  
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.dbId != null" > 
+		and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.code != null" > 
+		and TB.CODE = #{queryParam.code}
+		</if>
+		<if test=" queryParam.name != null" > 
+		and TB.NAME = #{queryParam.name}
+		</if>
+		<if test=" queryParam.displayName != null" > 
+		and TB.DISPLAY_NAME = #{queryParam.displayName}
+		</if>
+		<if test=" queryParam.userPassword != null" > 
+		and TB.USER_PASSWORD = #{queryParam.userPassword}
+		</if>
+		<if test=" queryParam.orgDbId != null" > 
+		and TB.ORG_DB_ID = #{queryParam.orgDbId}
+		</if>
+		<if test=" queryParam.createdDt != null" > 
+		and TB.CREATED_DT = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.version != null" > 
+		and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.status != null" > 
+		and TB.STATUS = #{queryParam.status}
+		</if>
+		<if test=" queryParam.applicationName != null" > 
+		and TB.APPLICATION_NAME = #{queryParam.applicationName}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.ogzuser.model.Ogzuser">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM plt_ogz_user TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.ogzuser.model.Ogzuser">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM plt_ogz_user TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test="dbId != null" > 
+		and TB.DB_ID = #{dbId}
+		</if>
+		<if test="code != null" > 
+		and TB.CODE = #{code}
+		</if>
+		<if test="name != null" > 
+		and TB.NAME = #{name}
+		</if>
+		<if test="displayName != null" > 
+		and TB.DISPLAY_NAME = #{displayName}
+		</if>
+		<if test="userPassword != null" > 
+		and TB.USER_PASSWORD = #{userPassword}
+		</if>
+		<if test="orgDbId != null" > 
+		and TB.ORG_DB_ID = #{orgDbId}
+		</if>
+		<if test="createdDt != null" > 
+		and TB.CREATED_DT = #{createdDt}
+		</if>
+		<if test="version != null" > 
+		and TB.VERSION = #{version}
+		</if>
+		<if test="status != null" > 
+		and TB.STATUS = #{status}
+		</if>
+		<if test="applicationName != null" > 
+		and TB.APPLICATION_NAME = #{applicationName}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if>  
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.ogzuser.model.Ogzuser">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM plt_ogz_user TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.ogzuser.model.Ogzuser">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM plt_ogz_user TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.ogzuser.model.Ogzuser">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM plt_ogz_user TB  
+          WHERE  TB.DB_ID = #{dbId}
+	</select>  
+		
+</mapper>

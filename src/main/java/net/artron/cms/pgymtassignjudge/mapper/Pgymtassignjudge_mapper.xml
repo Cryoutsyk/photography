@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.artron.cms.pgymtassignjudge.mapper.PgymtassignjudgeMapper">
+
+	<!-- save -->
+	<insert id="save"
+		parameterType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		INSERT INTO cms_pgy_mt_assignjudge
+		(
+		CREATED_BY,
+		CREATED_DT,
+		UPDATED_BY,
+		UPDATED_DT,
+		VERSION,
+		TABINDEX,
+		DB_ID,
+		MT_ID,
+		JDE_ID,
+		REVIEWSTATE
+		)
+		VALUES
+		(
+		#{createdBy, jdbcType=VARCHAR},
+		#{createdDt, jdbcType=TIMESTAMP},
+		#{updatedBy, jdbcType=VARCHAR},
+		#{updatedDt, jdbcType=VARCHAR},
+		#{version, jdbcType=INTEGER},
+		#{tabIndex, jdbcType=INTEGER},
+		#{dbId, jdbcType=VARCHAR},
+		#{mtId, jdbcType=VARCHAR},
+		#{jdeId, jdbcType=VARCHAR},
+		#{reviewstate, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- update -->
+	<update id="update"
+		parameterType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		UPDATE cms_pgy_mt_assignjudge
+		<set>
+			<if test=" createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test=" createdDt != null">
+				CREATED_DT = #{createdDt},
+			</if>
+			<if test=" updatedBy != null">
+				UPDATED_BY = #{updatedBy},
+			</if>
+			<if test=" updatedDt != null">
+				UPDATED_DT = #{updatedDt},
+			</if>
+			<if test=" version != null">
+				VERSION = #{version},
+			</if>
+			<if test=" tabIndex != null">
+				TABINDEX = #{tabIndex},
+			</if>
+			<if test=" mtId != null">
+				MT_ID = #{mtId},
+			</if>
+			<if test=" jdeId != null">
+				JDE_ID = #{jdeId},
+			</if>
+			<if test=" reviewstate != null">
+				REVIEWSTATE = #{reviewstate},
+			</if>
+		</set>
+		WHERE DB_ID = #{dbId}
+	</update>
+
+	<!-- delete -->
+	<delete id="delete"
+		parameterType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		DELETE FROM cms_pgy_mt_assignjudge WHERE DB_ID IN
+		<foreach item="dbid" index="index" collection="dbIds" open="("
+			separator="," close=")">
+			#{dbid}
+		</foreach>
+	</delete>
+
+	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,
+		TB.CREATED_DT AS createdDt,
+		TB.UPDATED_BY AS updatedBy,
+		TB.UPDATED_DT AS updatedDt,
+		TB.VERSION AS version,
+		TB.TABINDEX AS tabIndex,
+		TB.DB_ID AS dbId,
+		TB.MT_ID AS mtId,
+		TB.JDE_ID AS jdeId,
+		TB.REVIEWSTATE AS reviewstate
+	</sql>
+
+	<sql id="queryWhereWithPage">
+		<if test=" queryParam.createdBy != null">
+			and TB.CREATED_BY = #{queryParam.createdBy}
+		</if>
+		<if test=" queryParam.createdDt != null">
+			and TB.CREATED_DT = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.updatedBy != null">
+			and TB.UPDATED_BY = #{queryParam.updatedBy}
+		</if>
+		<if test=" queryParam.updatedDt != null">
+			and TB.UPDATED_DT = #{queryParam.updatedDt}
+		</if>
+		<if test=" queryParam.version != null">
+			and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.tabIndex != null">
+			and TB.TABINDEX = #{queryParam.tabIndex}
+		</if>
+		<if test=" queryParam.dbId != null">
+			and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.mtId != null">
+			and TB.MT_ID = #{queryParam.mtId}
+		</if>
+		<if test=" queryParam.jdeId != null">
+			and TB.JDE_ID = #{queryParam.jdeId}
+		</if>
+		<if test=" queryParam.reviewstate != null">
+			and TB.REVIEWSTATE = #{queryParam.reviewstate}
+		</if>
+		<if
+			test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+			and TB.DB_ID IN
+			<foreach item="dbid" index="index" collection="queryParam.dbIds"
+				open="(" separator="," close=")">
+				#{dbid}
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel"
+		resultType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_assignjudge TB
+		WHERE 1=1
+		<include refid="queryWhereWithPage" />
+	</select>
+
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel"
+		resultType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_assignjudge TB
+		WHERE 1=1
+		<include refid="queryWhereWithPage" />
+	</select>
+
+	<sql id="queryWhereWithEntity">
+		<if test="createdBy != null">
+			and TB.CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDt != null">
+			and TB.CREATED_DT = #{createdDt}
+		</if>
+		<if test="updatedBy != null">
+			and TB.UPDATED_BY = #{updatedBy}
+		</if>
+		<if test="updatedDt != null">
+			and TB.UPDATED_DT = #{updatedDt}
+		</if>
+		<if test="version != null">
+			and TB.VERSION = #{version}
+		</if>
+		<if test="tabIndex != null">
+			and TB.TABINDEX = #{tabIndex}
+		</if>
+		<if test="dbId != null">
+			and TB.DB_ID = #{dbId}
+		</if>
+		<if test="mtId != null">
+			and TB.MT_ID = #{mtId}
+		</if>
+		<if test="jdeId != null">
+			and TB.JDE_ID = #{jdeId}
+		</if>
+		<if test="reviewstate != null">
+			and TB.REVIEWSTATE = #{reviewstate}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+			and TB.DB_ID IN
+			<foreach item="dbid" index="index" collection="dbIds" open="("
+				separator="," close=")">
+				#{dbid}
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity"
+		resultType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_assignjudge TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity"
+		resultType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_assignjudge TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String"
+		resultType="net.artron.cms.pgymtassignjudge.model.Pgymtassignjudge">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_assignjudge TB
+		WHERE TB.DB_ID = #{dbId}
+	</select>
+	<!-- querycheckrater 取评委及选中信息 -->
+	<select id="queryCheckrater" parameterType="Map"
+		resultType="net.artron.cms.pgymtassignjudge.model.Pgycheckrater">
+		SELECT ra.db_id,ra.img_url,ra.`name`,ra.good_type, (CASE
+		WHEN ass.db_id IS NULL THEN 0 ELSE 1 END) AS checkrater from
+		cms_pgy_rater ra LEFT JOIN
+		(SELECT age.* from cms_pgy_mt_assignjudge age LEFT JOIN cms_pgy_match m ON
+		m.DB_ID=age.MT_ID WHERE m.DB_ID=#{mtId} AND m.HU_ID=#{huId} ) AS ass
+		ON ra.db_id=ass.JDE_ID
+		WHERE ra.host_unit_id=#{huId} AND ra.`status`=1 order by checkrater desc ;
+	</select>
+</mapper>

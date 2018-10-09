@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+	<title th:text="#{main.head.title}">雅昌管理系统</title>
+
+	<head th:replace="/include_head">
+
+		<link rel="stylesheet" type="text/css" href="../static/iconfont/iconfont.css" />
+		<!-- bootstrap 3.3.7 -->
+		<link rel="stylesheet" type="text/css" href="../static/bootstrap/v3.3.7/css/bootstrap.min.css" />
+		<!-- Font Awesome -->
+		<link rel="stylesheet" type="text/css" href="../static/font-awesome/v4.7.0/css/font-awesome.min.css" />
+		<!-- Ionicons -->
+		<link rel="stylesheet" type="text/css" href="../static/ionicons/v2.0.0/css/ionicons.min.css" />
+
+		<!-- Theme style -->
+		<link rel="stylesheet" type="text/css" href="../static/adminlte/AdminLTE.min.css" />
+		<link rel="stylesheet" type="text/css" href="../static/adminlte/skins/skin-blue.min.css" />
+		<!-- jquery-ui -->
+		<link rel="stylesheet" type="text/css" href="../static/jquery-ui/v1.10.3/css/jquery-ui-1.10.3.custom.css" />
+		<!-- bootstrap-table -->
+		<link rel="stylesheet" type="text/css" href="../static/bootstrap-table/v1.11.1/css/bootstrap-table.min.css" />
+		<link rel="stylesheet" type="text/css" href="../static/bootstrap-table/v1.11.1/extensions/editable/css/bootstrap-editable.css" />
+		<link rel="stylesheet" type="text/css" href="../static/css/base.css" />
+		<link rel="stylesheet/less" href="../static/css/index.less" />
+		<link rel="stylesheet" type="text/css" href="../static/jstree/v3.3.5/themes/default/style.min.css" />
+		<!--日历控件样式-->
+		<link rel="stylesheet" type="text/css" href="../static/ECalendar/style.css" />
+
+		<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		<![endif]-->
+
+		<!-- less -->
+		<script type="text/javascript" src="../static/less/less.min.js"></script>
+		<!-- jQuery 3 -->
+		<script src="../static/jquery/v3.2.1/jquery.min.js"></script>
+		<!-- <script src="../static/jquery/jquery.xdomainajax.js" ></script> -->
+		<!-- Bootstrap 3.3.7 -->
+		<script src="../static/bootstrap/v3.3.7/js/bootstrap.min.js"></script>
+		<!-- FastClick -->
+		<script src="../static/adminlte/plugins/fastclick/fastclick.js"></script>
+		<!-- SlimScroll -->
+		<script src="../static/jquery/slimscroll/v1.3.8/jquery.slimscroll.min.js"></script>
+		<script src="../static/adminlte/js/adminlte.min.js"></script>
+
+		<!-- jquery-ui -->
+		<script src="../static/jquery-ui/v1.10.3/js/jquery-ui-1.10.3.custom.min.js"></script>
+
+		<!-- bootstrap-table -->
+		<script src="../static/bootstrap-table/v1.11.1/bootstrap-table.min.js"></script>
+		<script src="../static/bootstrap-table/v1.11.1/extensions/editable/bootstrap-table-editable.min.js"></script>
+		<script src="../static/bootstrap-table/v1.11.1/extensions/editable/bootstrap-editable.js"></script>
+		<script src="../static/bootstrap-table/v1.11.1/extensions/export/bootstrap-table-export.min.js"></script>
+		<script src="../static/table-export/v1.9.8/tableExport.js"></script>
+		<script src="../static/bootstrap-table/v1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+		<script src="../static/javascript/artron-bootstrap-table.1.0.js"></script>
+
+		<script src="../static/bootstrap/plugins/bootbox/v4.4.0/bootbox.min.js"></script>
+
+		<!-- custom.js.lib -->
+		<!-- tab -->
+		<script src="../static/javascript/artron-tabs-1.0.js"></script>
+		<script src="../static/javascript/anscript-1.0.js"></script>
+		<script src="../static/javascript/artron-utils.js"></script>
+		<script src="../static/jstree/v3.3.5/jstree.min.js"></script>
+		<script src="../static/javascript/artron-alert.js"></script>
+		<script src="../static/javascript/develop.js"></script>
+		<!-- 日历控件 -->
+		<script type="text/javascript" src="../static/ECalendar/Ecalendar.jquery.min.js"></script>
+
+	</head>
+
+	<body class="hold-transition skin-blue sidebar-mini" data-spy="scroll" data-target=".bs-docs-sidebar" data-twttr-rendered="true">
+		<div class="artron artron-default" id="main_box">
+			<div class="wrapper">
+
+				<!-- Main Header -->
+				<header class="main-header artron-header">
+					<!-- Logo -->
+					<a href="javascript:;" class="logo">
+						<!-- mini logo for sidebar mini 50x50 pixels -->
+						<!--<span class="logo-mini"><b>A</b>DM</span>-->
+						<!-- logo for regular state and mobile devices -->
+						<span class="logo-mini">CMS</span>
+						<!--<span class="logo-lg"><b>数</b>字资产管理</span>  -->
+						<span class="logo-lg">摄影平台</span>
+					</a>
+					<div class="logout" id="logout">退出登录</div>
+					<div class="artron-skin">换肤
+						<ul class="artron-skin-menu" id="artron-skin-menu">
+							<li data-index="default">默认色</li>
+							<li data-index="gray">灰色</li>
+						</ul>
+					</div>
+					
+					<!-- Header Navbar -->
+					<nav class="navbar navbar-default navbar-static-top" style="" role="navigation" th:replace="header :: navbar">
+						<a href="javascript:;" class="sidebar-toggle" data-toggle="push-menu" role="button">
+							<span class="sr-only">Toggle navigation</span>
+						</a>
+						<div class="navbar-custom-menu">
+
+							<ul class="nav navbar-nav">
+								<li>
+									<a href="javascript:;">用户管理</a>
+									<span class="pipe"></span>
+								</li>
+								<li>
+									<a href="javascript:;">数据管理</a>
+									<span class="pipe"></span>
+								</li>
+								<li>
+									<a href="javascript:;">资源管理</a>
+									<span class="pipe"></span>
+								</li>
+								<li>
+									<a href="javascript:;">系统管理</a>
+									<span class="pipe"></span>
+								</li>
+								<li>
+									<a href="javascript:;">部门管理</a>
+									<span class="pipe"></span>
+								</li>
+								<li>
+									<a href="javascript:;">用户管理</a>
+									<span class="pipe"></span>
+								</li>
+							</ul>
+						</div>
+					</nav>
+				</header>
+
+				<!-- Left side column. contains the logo and sidebar -->
+				<aside class="main-sidebar artron-sidebar">
+
+					<!-- sidebar: style can be found in sidebar.less -->
+					<section class="sidebar" th:replace="left :: ${leftMenu} (loginUserName=${userName}, menus=${menus})">
+
+						<!-- Sidebar user panel (optional) -->
+						<div class="user-panel artron-user">
+							<div class="pull-left artron-head-portrait">
+								<!--<img src="../static/image/user2-160x160.jpg" th:src="@{/image/user2-160x160.jpg}" class="img-circle" alt="User Image" />-->
+								<img src="../static/image/topo.jpg" class="img-circle" alt="User Image" />
+							</div>
+							<div class="pull-left artron-user-info">
+								<p th:text="${userName}">管理员</p>
+								<!--<p th:text="${userName}">当前系统: 默认系统 </p>-->
+								<!-- Status -->
+								<!--<a href="javascript:;"><i class="fa fa-circle text-success"></i> version 1.0.1</a>-->
+								<p><i class="fa fa-circle text-success"></i>默认系统</p>
+								<p><i class="fa fa-circle text-success"></i>version 1.0.1</p>
+							</div>
+						</div>
+
+						<!-- search form (Optional) -->
+						<form action="#" method="get" class="sidebar-form">
+							<div class="input-group">
+								<input type="text" name="q" class="form-control" placeholder="Search...">
+								<span class="input-group-btn">
+			              <button type="submit" name="search" id="search-btn" class="btn btn-flat"><i class="fa fa-search"></i>
+			              </button>
+			            </span>
+							</div>
+						</form>
+						<!-- /.search form -->
+
+						<!-- Sidebar Menu -->
+						<ul class="sidebar-menu" data-widget="tree">
+							<li>
+								<a href="javascript:;"><i class="icon iconfont">&#xe62a;</i> <span>首页</span></a>
+							</li>
+							<li class="active" onClick="addTab2('test1', '资源管理', '')">
+								<a href="javascript:;"><i class="icon iconfont">&#xe65d;</i> <span>资源管理</span></a>
+							</li>
+							<li onClick="addTab2('test2', '数据管理', '')">
+								<a href="javascript:;"><i class="icon iconfont">&#xe62a;</i> <span>数据管理</span></a>
+							</li>
+							<li class="treeview">
+								<a href="javascript:;"> <i class="icon iconfont">&#xe651;</i> <span>组织机构管理</span>
+									<span class="pull-right-container">
+			                <i class="fa fa-angle-left pull-right"></i>
+			              </span>
+								</a>
+								<ul class="treeview-menu">
+									<li onClick="addTab('test3', '数据管理3', '')">
+										<a href="javascript:;"><i class="icon iconfont">&#xe62a;</i> <span>数据管理</span></a>
+									</li>
+									<li onClick="addTab2( 'test4', '用户管理', '')">
+										<a href="javascript:;"><i class="icon iconfont">&#xe62a;</i><span>用户管理</span></a>
+									</li>
+								</ul>
+							</li>
+							<li class="treeview">
+								<a href="javascript:;"> <i class="icon iconfont">&#xe651;</i> <span>组织机构管理</span>
+									<span class="pull-right-container">
+			                <i class="fa fa-angle-left pull-right"></i>
+			              </span>
+								</a>
+								<ul class="treeview-menu">
+									<li onClick="addTab('test3', '数据管理3', '')">
+										<a href="javascript:;"><i class="icon iconfont">&#xe62a;</i> <span>数据管理</span></a>
+									</li>
+									<li onClick="addTab2( 'test4', '用户管理', '')">
+										<a href="javascript:;"><i class="icon iconfont">&#xe62a;</i><span>用户管理</span></a>
+									</li>
+								</ul>
+							</li>
+							<li onClick="addTab2('test5', '系统管理5', '')">
+								<a href="javascript:;"><i class="icon iconfont">&#xe751;</i> <span>系统管理</span></a>
+							</li>
+						</ul>
+						<!-- Sidebar user panel (optional) -->
+					</section>
+
+				</aside>
+
+				<!-- Content Wrapper. Contains page content -->
+				<!--<div class="content-wrapper artron-content">-->
+				<div class="artron-content lfs">
+					<!-- Content Header (Page header) -->
+
+					<!-- Main content -->
+					<section class="content container-fluid artron-section">
+						<div id="mainContentContainer">
+							<!-- 面包屑导航 start -->
+							<div class="artron-crumbs-box">
+								<ul>
+									<li class="ui-tabs-active">
+										<a href="#tabs-main">主界面</a>
+									</li>
+								</ul>
+							</div>
+							<!-- 面包屑导航 end -->
+							<div id="tabs-main" class="artron-tabs-panel">
+							</div>
+						</div>
+
+					</section>
+					<!-- /.content -->
+					<div class="artron-footer" th:replace="footer :: footer (version=${version}, loginUserName=${userName}, roles=${roles}, applicationTitle=${applicationTitle})">
+
+						<div class="pull-right hidden-xs">
+							<b>Version</b> <span th:text="${version}">2.4.0</span>
+						</div>
+
+						<strong>Copyright &copy; 2016 <a href="javascript:;">Company</a>.</strong> All rights reserved.
+					</div>
+				</div>
+				<div class="control-sidebar-bg" th:value="${applicationTitle}"></div>
+			</div>
+		</div>
+		<script type="text/javascript" th:inline="javascript">
+			var AdminLTEOptions = {
+				navbarMenuSlimscroll: true,
+				animationSpeed: 'fast',
+				/*指定控件的折叠速度，例如box collapse/expand展开折叠 and sidebar treeview slide up/down上下滑动.。此选项接受整数为毫秒，'fast', 'normal', or 'slow'*/
+				/*给触摸设备开启快速点击体验，需要引用jquery.slimscroll.min.js*/
+				enableFastclick: false,
+				enableControlTreeView: true,
+				/*树视图控制，即侧边栏的点击动画效果*/
+				enableBoxWidget: true /*允许box折叠和删除*/
+			};
+			$(document).ready(function() {
+				//界面加载完执行
+				artronInit();
+				
+				var ctx = /*[[${ctx}]]*/ '';
+				
+				//$.getScript( ctx + "/open/ajaxHelper.js?format=js", function(){
+				//});
+				
+				$.ajax({
+				  url: ctx + "/open/ajaxHelper.js?format=js",
+				  dataType: "script",
+				  accepts: {
+					  contentType: 'application/javascript;charset=UTF-8'
+				  },
+				  contentType: "application/javascript;charset=UTF-8", 
+				  success: function(){}
+				});
+				
+				$('#logout').on('click', function(){
+					var userCode = /*[[${userCode}]]*/ '';
+					window.location.href="open/logout?userCode=" + userCode;	
+					
+				});
+			});
+		</script>
+		<!-- AdminLTE App -->
+		
+	</body>
+
+</html>

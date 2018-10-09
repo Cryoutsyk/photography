@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+	xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+	typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+	targetNamespace="http://activiti.org/test">
+	<process id="process" name="测试流程" isExecutable="true">
+		<startEvent id="startNode" name="开始"
+			activiti:isInterrupting="false"></startEvent>
+		<userTask id="one" name="第一步">
+			<extensionElements>
+				<activiti:taskListener event="create"
+					expression="${activitiNodeService.assign(task, task.eventName)}" />
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="sid-3551DFB2-DEC1-4C39-8C5B-63619580F54E"
+			sourceRef="startNode" targetRef="one"></sequenceFlow>
+		<userTask id="two" name="第二步">
+			<extensionElements>
+				<activiti:taskListener event="create"
+					expression="${activitiNodeService.assign(task, task.eventName)}" />
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="sid-C0E22D78-6D6E-44EE-A402-0124A334D15F"
+			sourceRef="one" targetRef="two"></sequenceFlow>
+		<userTask id="three" name="第三步">
+			<extensionElements>
+				<activiti:taskListener event="create"
+					expression="${activitiNodeService.assign(task, task.eventName)}" />
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="sid-086AC34D-BCCE-49B2-B48D-123C6644FA7D"
+			sourceRef="two" targetRef="three"></sequenceFlow>
+		<userTask id="four" name="第四步">
+			<extensionElements>
+				<activiti:taskListener event="create"
+					expression="${activitiNodeService.assign(task, task.eventName)}" />
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="sid-44B23EF7-2DC4-4832-B34F-B04709A6E4BF"
+			sourceRef="three" targetRef="four"></sequenceFlow>
+		<receiveTask id="waitState" name="结束节点"></receiveTask>
+		<sequenceFlow id="sid-F7123058-4033-457A-95F2-386F941BD778"
+			sourceRef="four" targetRef="waitState"></sequenceFlow>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_process">
+		<bpmndi:BPMNPlane bpmnElement="process" id="BPMNPlane_process">
+			<bpmndi:BPMNShape bpmnElement="startNode" id="BPMNShape_startNode">
+				<omgdc:Bounds height="30.0" width="30.0" x="128.0" y="115.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="one" id="BPMNShape_one">
+				<omgdc:Bounds height="80.0" width="100.0" x="203.0" y="90.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="two" id="BPMNShape_two">
+				<omgdc:Bounds height="80.0" width="100.0" x="348.0" y="90.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="three" id="BPMNShape_three">
+				<omgdc:Bounds height="80.0" width="100.0" x="493.0" y="90.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="four" id="BPMNShape_four">
+				<omgdc:Bounds height="80.0" width="100.0" x="638.0" y="90.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="waitState" id="BPMNShape_waitState">
+				<omgdc:Bounds height="80.0" width="100.0" x="878.0" y="90.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="sid-3551DFB2-DEC1-4C39-8C5B-63619580F54E"
+				id="BPMNEdge_sid-3551DFB2-DEC1-4C39-8C5B-63619580F54E">
+				<omgdi:waypoint x="158.0" y="130.0"></omgdi:waypoint>
+				<omgdi:waypoint x="203.0" y="130.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="sid-44B23EF7-2DC4-4832-B34F-B04709A6E4BF"
+				id="BPMNEdge_sid-44B23EF7-2DC4-4832-B34F-B04709A6E4BF">
+				<omgdi:waypoint x="593.0" y="130.0"></omgdi:waypoint>
+				<omgdi:waypoint x="638.0" y="130.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="sid-F7123058-4033-457A-95F2-386F941BD778"
+				id="BPMNEdge_sid-F7123058-4033-457A-95F2-386F941BD778">
+				<omgdi:waypoint x="738.0" y="130.0"></omgdi:waypoint>
+				<omgdi:waypoint x="878.0" y="130.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="sid-C0E22D78-6D6E-44EE-A402-0124A334D15F"
+				id="BPMNEdge_sid-C0E22D78-6D6E-44EE-A402-0124A334D15F">
+				<omgdi:waypoint x="303.0" y="130.0"></omgdi:waypoint>
+				<omgdi:waypoint x="348.0" y="130.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="sid-086AC34D-BCCE-49B2-B48D-123C6644FA7D"
+				id="BPMNEdge_sid-086AC34D-BCCE-49B2-B48D-123C6644FA7D">
+				<omgdi:waypoint x="448.0" y="130.0"></omgdi:waypoint>
+				<omgdi:waypoint x="493.0" y="130.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

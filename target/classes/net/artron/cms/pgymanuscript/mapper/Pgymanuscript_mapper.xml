@@ -1,0 +1,602 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.artron.cms.pgymanuscript.mapper.PgymanuscriptMapper">
+
+	<!-- save -->
+	<insert id="save" parameterType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		INSERT INTO cms_pgy_manuscript
+		(
+		CREATED_BY,
+		CREATED_DT,
+		UPDATED_BY,
+		UPDATED_DT,
+		VERSION,
+		TABINDEX,
+		DB_ID,
+		CODE,
+		MT_ID,
+		NAME,
+		AUTHOR,
+		DETAILS,
+		MT_GP_ID,
+		MSTTYPE,
+		CHANNEL,
+		USER_ID,
+		MSTSTATE1,
+		MSTSTATE2,
+		VOTES,
+		PHOTONAME
+		)
+		VALUES
+		(
+		#{createdBy,
+		jdbcType=VARCHAR},
+		#{createdDt, jdbcType=TIMESTAMP},
+		#{updatedBy,
+		jdbcType=VARCHAR},
+		#{updatedDt, jdbcType=VARCHAR},
+		#{version,
+		jdbcType=INTEGER},
+		#{tabIndex, jdbcType=INTEGER},
+		#{dbId,
+		jdbcType=VARCHAR},
+		#{code,
+		jdbcType=VARCHAR},
+		#{mtId, jdbcType=VARCHAR},
+		#{name, jdbcType=VARCHAR},
+		#{author, jdbcType=VARCHAR},
+		#{details,
+		jdbcType=VARCHAR},
+		#{mtGpId,
+		jdbcType=VARCHAR},
+		#{msttype,
+		jdbcType=INTEGER},
+		#{channel,
+		jdbcType=INTEGER},
+		#{userId,
+		jdbcType=VARCHAR},
+		#{mststate1,
+		jdbcType=INTEGER},
+		#{mststate2,
+		jdbcType=INTEGER},
+		#{votes,
+		jdbcType=DECIMAL},
+		#{photoname,
+		jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<update id="updateBatch" parameterType="java.util.List">
+		update cms_pgy_manuscript
+		<trim prefix="set" suffixOverrides=",">
+			<trim prefix="mststate1 =case" suffix="end,">
+				<foreach collection="list" item="item" index="index">
+					when
+					db_id=#{item.mst_id} then #{item.status}
+				</foreach>
+			</trim>
+		</trim>
+		where db_id in
+		<foreach collection="list" index="index" item="item"
+			separator="," open="(" close=")">
+			#{item.mst_id,jdbcType=VARCHAR}
+		</foreach>
+	</update>
+
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		UPDATE cms_pgy_manuscript
+		<set>
+			<if test=" createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+
+			<if test=" updatedBy != null">
+				UPDATED_BY = #{updatedBy},
+			</if>
+
+			<if test=" version != null">
+				VERSION = #{version},
+			</if>
+			<if test=" tabIndex != null">
+				TABINDEX = #{tabIndex},
+			</if>
+			<if test=" code != null">
+				CODE = #{code},
+			</if>
+			<if test=" mtId != null">
+				MT_ID = #{mtId},
+			</if>
+			<if test=" name != null">
+				NAME = #{name},
+			</if>
+			<if test=" author != null">
+				AUTHOR = #{author},
+			</if>
+			<if test=" details != null">
+				DETAILS = #{details},
+			</if>
+			<if test=" mtGpId != null">
+				MT_GP_ID = #{mtGpId},
+			</if>
+			<if test=" msttype != null">
+				MSTTYPE = #{msttype},
+			</if>
+			<if test=" channel != null">
+				CHANNEL = #{channel},
+			</if>
+			<if test=" userId != null">
+				USER_ID = #{userId},
+			</if>
+			<if test=" mststate1 != null">
+				MSTSTATE1 = #{mststate1},
+			</if>
+			<if test=" mststate2 != null">
+				MSTSTATE2 = #{mststate2},
+			</if>
+			<if test=" votes != null">
+				VOTES = #{votes},
+			</if>
+			<if test=" photoname != null">
+				PHOTONAME = #{photoname},
+			</if>
+		</set>
+		WHERE DB_ID = #{dbId}
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		DELETE FROM cms_pgy_manuscript WHERE DB_ID IN
+		<foreach item="dbid" index="index" collection="dbIds" open="("
+			separator="," close=")">
+			#{dbid}
+		</foreach>
+	</delete>
+
+	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,
+		TB.CREATED_DT AS createdDt,
+		TB.UPDATED_BY AS updatedBy,
+		TB.UPDATED_DT AS updatedDt,
+		TB.VERSION AS
+		version,
+		TB.TABINDEX AS tabIndex,
+		TB.DB_ID AS dbId,
+		TB.CODE AS code,
+		TB.MT_ID AS mtId,
+		TB.NAME AS name,
+		TB.AUTHOR AS author,
+		TB.DETAILS AS
+		details,
+		TB.MT_GP_ID AS mtGpId,
+		TB.MSTTYPE AS msttype,
+		TB.CHANNEL AS
+		channel,
+		TB.USER_ID AS userId,
+		TB.MSTSTATE1 AS mststate1,
+		TB.MSTSTATE2 AS
+		mststate2,
+		TB.VOTES AS votes,
+		TB.PHOTONAME AS photoname
+	</sql>
+
+	<sql id="queryWhereWithPage">
+		<if test=" queryParam.createdBy != null">
+			and TB.CREATED_BY = #{queryParam.createdBy}
+		</if>
+		<if test=" queryParam.createdDt != null">
+			and TB.CREATED_DT = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.updatedBy != null">
+			and TB.UPDATED_BY = #{queryParam.updatedBy}
+		</if>
+		<if test=" queryParam.updatedDt != null">
+			and TB.UPDATED_DT = #{queryParam.updatedDt}
+		</if>
+		<if test=" queryParam.version != null">
+			and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.tabIndex != null">
+			and TB.TABINDEX = #{queryParam.tabIndex}
+		</if>
+		<if test=" queryParam.dbId != null">
+			and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.code != null">
+			and TB.CODE = #{queryParam.code}
+		</if>
+		<if test=" queryParam.mtId != null">
+			and TB.MT_ID = #{queryParam.mtId}
+		</if>
+		<if test=" queryParam.name != null">
+			and TB.NAME = #{queryParam.name}
+		</if>
+		<if test=" queryParam.author != null">
+			and TB.AUTHOR = #{queryParam.author}
+		</if>
+		<if test=" queryParam.details != null">
+			and TB.DETAILS = #{queryParam.details}
+		</if>
+		<if test=" queryParam.mtGpId != null">
+			and TB.MT_GP_ID = #{queryParam.mtGpId}
+		</if>
+		<if test=" queryParam.msttype != null">
+			and TB.MSTTYPE = #{queryParam.msttype}
+		</if>
+		<if test=" queryParam.channel != null">
+			and TB.CHANNEL = #{queryParam.channel}
+		</if>
+		<if test=" queryParam.userId != null">
+			and TB.USER_ID = #{queryParam.userId}
+		</if>
+		<if test=" queryParam.mststate1 != null">
+			and TB.MSTSTATE1 = #{queryParam.mststate1}
+		</if>
+		<if test=" queryParam.mststate2 != null">
+			and TB.MSTSTATE2 = #{queryParam.mststate2}
+		</if>
+		<if test=" queryParam.votes != null">
+			and TB.VOTES = #{queryParam.votes}
+		</if>
+		<if test=" queryParam.photoname != null">
+			and TB.PHOTONAME = #{queryParam.photoname}
+		</if>
+		<if
+			test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+			and TB.DB_ID IN
+			<foreach item="dbid" index="index" collection="queryParam.dbIds"
+				open="(" separator="," close=")">
+				#{dbid}
+			</foreach>
+		</if>
+	</sql>
+
+	<sql id="selectColumnsByPage">
+		(CASE TB.MSTTYPE WHEN 0 THEN '单张' when 1 then '组照' ELSE
+		'未知' END ) as
+		msttypetext,
+		(CASE TB.CHANNEL WHEN 0 THEN '当前渠道' when 1
+		then '上传' ELSE '未知' END ) as
+		channeltext,
+		TB.CREATED_BY AS createdBy,
+		TB.CREATED_DT AS createdDt,
+		TB.UPDATED_BY AS updatedBy,
+		TB.UPDATED_DT AS
+		updatedDt,
+		TB.VERSION AS
+		version,
+		TB.TABINDEX AS tabIndex,
+		TB.DB_ID AS
+		dbId,
+		TB.CODE AS code,
+		TB.MT_ID AS mtId,
+		TB.NAME AS name,
+		TB.AUTHOR AS
+		author,
+		TB.DETAILS AS
+		details,
+		TB.MT_GP_ID AS mtGpId,
+		TB.MSTTYPE AS
+		msttype,
+		TB.CHANNEL AS
+		channel,
+		TB.USER_ID AS userId,
+		TB.MSTSTATE1 AS
+		mststate1,
+		TB.MSTSTATE2 AS
+		mststate2,
+		TB.VOTES AS votes,
+		TB.PHOTONAME AS
+		photoname
+	</sql>
+
+	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		( CASE WHEN ad.`NAME` IS NOT NULL THEN ad.`NAME` ELSE '未获奖' END
+		) AS adname,
+		gp.`NAME` AS gpname,
+		COUNT(pt.DB_ID) as ptcount,
+		(
+		SELECT
+		mpt.PHOTOURL
+		FROM
+		CMS_PGY_MST_PHOTO mpt
+		WHERE
+		mpt.MST_ID = TB.DB_ID
+		AND
+		mpt.TABINDEX = MIN(pt.TABINDEX)
+		) AS firstpturl,
+		( CASE TB.CHANNEL WHEN
+		0 THEN
+		( SELECT u.NUMBER from cms_pgy_user u WHERE u.db_id=TB.USER_ID )
+		WHEN 1
+		THEN
+		(SELECT hu.account_number from cms_pgy_match mt LEFT JOIN
+		cms_pgy_host_unit hu on
+		hu.db_id=mt.hu_id WHERE mt.db_id=TB.MT_ID)
+		END
+		)
+		AS upusername,
+		<include refid="selectColumnsByPage" />
+		FROM cms_pgy_manuscript TB
+		LEFT JOIN CMS_PGY_MST_PHOTO pt ON pt.MST_ID
+		= TB.DB_ID
+		LEFT JOIN cms_pgy_mt_group gp ON TB.MT_GP_ID = gp.DB_ID
+		LEFT
+		JOIN cms_pgy_mt_awardsinfo adi ON adi.MST_ID = TB.DB_ID
+		LEFT JOIN
+		cms_pgy_mt_awards ad ON ad.DB_ID = adi.AD_ID
+		WHERE 1=1
+		<include refid="queryWhereByPage" />
+		GROUP BY
+		TB.db_id
+		order by TB.CREATED_DT desc
+	</select>
+
+	<sql id="queryWhereByPage">
+
+		<if test=" queryParam.mtId != null and queryParam.mtId !='' ">
+			and TB.MT_ID = #{queryParam.mtId}
+		</if>
+		<if test=" queryParam.name != null and queryParam.name !='' ">
+			and (TB.NAME like concat('%',#{queryParam.name},'%')
+			or
+			TB.AUTHOR like concat('%',#{queryParam.name},'%') )
+		</if>
+
+		<if test=" queryParam.mtGpId != null and queryParam.mtGpId !='' ">
+			and TB.MT_GP_ID = #{queryParam.mtGpId}
+		</if>
+		<if test=" queryParam.msttype != null   ">
+			and TB.MSTTYPE = #{queryParam.msttype}
+		</if>
+		<if test=" queryParam.channel != null   ">
+			and TB.CHANNEL = #{queryParam.channel}
+		</if>
+		<if test=" queryParam.adid != null and  queryParam.adid != '' ">
+			and ad.db_id = #{queryParam.adid}
+		</if>
+
+	</sql>
+
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_manuscript TB
+		WHERE 1=1
+		<include refid="queryWhereWithPage" />
+	</select>
+
+	<sql id="queryWhereWithEntity">
+		<if test="mtId != null and mtId != '' ">
+			and TB.MT_ID = #{mtId}
+		</if>
+		<if test=" mststate1 != null">
+			and TB.MSTSTATE1 = #{mststate1}
+		</if>
+		<if test=" mststate2 != null">
+			and TB.MSTSTATE2 = #{mststate2}
+		</if>
+		<!-- <if test=" votes != null"> and TB.VOTES = #{votes} </if> -->
+	</sql>
+
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_manuscript TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_manuscript TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_manuscript TB
+		WHERE TB.DB_ID = #{dbId}
+	</select>
+
+	<select id="queryChannelCount" parameterType="java.lang.String"
+		resultType="net.artron.cms.pgymanuscript.model.ChannelStatistics">
+		SELECT ( SELECT COUNT(1) from cms_pgy_manuscript WHERE
+		MT_ID = #{mtid} ) as
+		allcount ,
+		(SELECT COUNT(1) from cms_pgy_manuscript
+		WHERE MT_ID=#{mtid} AND CHANNEL =0)
+		as dqcount ,
+		(SELECT
+		MAX(pt.CREATED_DT) from cms_pgy_manuscript mst ,CMS_PGY_MST_PHOTO pt
+		WHERE mst.DB_ID=pt.MST_ID AND mst.CHANNEL=1 AND mst.MT_ID=#{mtid} ) as
+		lastTime
+	</select>
+	<select id="queryMstCountByMtid" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(db_id) from cms_pgy_manuscript WHERE
+		MT_ID=#{mtid}
+	</select>
+	<select id="queryMstStateCountByMtid" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT count(db_id) from cms_pgy_manuscript WHERE
+		MT_ID=#{mtid} and
+		MSTSTATE1=0
+	</select>
+	<select id="queryMaxCode" resultType="Integer" parameterType="java.lang.String">
+		SELECT MAX( CAST(right(TB.CODE,6) AS SIGNED)) as maxcode from
+		cms_pgy_manuscript TB
+		WHERE TB.DB_ID=#{dbId}
+	</select>
+
+	<select id="queryMstByPage" parameterType="PageModel"
+		resultType="net.artron.cms.pgymtmstjde.model.RaterMst">
+		SELECT TB.DB_ID as dbId,TB.MT_ID as
+		mtId,TB.name,TB.author,TB.details,TB.mt_gp_id as mtGpId
+		,TB.msttype,TB.channel,TB.photourl,TB.MSTSTATE1,TB.MSTSTATE2,
+		<if test="queryParam.statenum != null and queryParam.statenum == 1 ">
+			TB.MSTSTATE1 as auditstate
+		</if>
+		<if test="queryParam.statenum != null and queryParam.statenum == 2 ">
+			TB.MSTSTATE2 as auditstate
+		</if>
+		from
+		(SELECT t.*,pt.photourl from
+		cms_pgy_manuscript t
+		,cms_pgy_mst_photo
+		pt
+		WHERE 1=1
+		<if test="queryParam.mtGpId != null and queryParam.mtGpId != '' ">
+			and t.MT_GP_ID =#{queryParam.mtGpId}
+		</if>
+		AND pt.mst_id=t.DB_ID AND pt.tabindex= (SELECT MIN(TABINDEX) from
+		cms_pgy_mst_photo WHERE MST_ID=t.DB_ID)) TB
+		WHERE 1=1
+		AND TB.MT_ID=
+		#{queryParam.mtId}
+
+		<if test="queryParam.tab != null and queryParam.tab != '' ">
+			<if test="queryParam.statenum != null and queryParam.statenum == 1 ">
+				and TB.MSTSTATE1=#{queryParam.tab}
+			</if>
+			<if test="queryParam.statenum != null and queryParam.statenum == 2 ">
+				and TB.MSTSTATE2=#{queryParam.tab}
+			</if>
+		</if>
+	</select>
+
+	<select id="queryCount" parameterType="Map"
+		resultType="net.artron.cms.pgymtmstjde.model.PendingCount">
+
+		SELECT
+		( SELECT COUNT(mst.DB_ID) from cms_pgy_manuscript mst WHERE
+		mst.MT_ID=#{mtid}
+		<if test="mtgpid != null and mtgpid != '' ">
+			AND mst.mt_gp_id=#{mtgpid}
+		</if>
+		<if test="statenum != null and statenum == 1 ">
+			AND mst.MSTSTATE1=0
+		</if>
+		<if test="statenum != null and statenum == 2 ">
+			AND mst.MSTSTATE2=0
+		</if>
+		) as dscount,
+
+		( SELECT COUNT(mst.DB_ID) from cms_pgy_manuscript mst
+		WHERE
+		mst.MT_ID=#{mtid}
+		<if test="mtgpid != null and mtgpid != '' ">
+			AND mst.mt_gp_id=#{mtgpid}
+		</if>
+		<if test="statenum != null and statenum == 1 ">
+			AND mst.MSTSTATE1=1
+		</if>
+		<if test="statenum != null and statenum == 2 ">
+			AND mst.MSTSTATE2=1
+		</if>
+		) as tgcount,
+
+		( SELECT COUNT(mst.DB_ID) from cms_pgy_manuscript mst
+		WHERE
+		mst.MT_ID=#{mtid}
+		<if test="mtgpid != null and mtgpid != '' ">
+			AND mst.mt_gp_id=#{mtgpid}
+		</if>
+		<if test="statenum != null and statenum == 1 ">
+			AND mst.MSTSTATE1=2
+		</if>
+		<if test="statenum != null and statenum == 2 ">
+			AND mst.MSTSTATE2=2
+		</if>
+		) as wtgcount
+
+	</select>
+	<select id="queryNoScoreCountByMtid" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		SELECT COUNT(mst.DB_ID) from cms_pgy_manuscript mst WHERE
+		mst.mt_id=#{mtid}
+		AND (SELECT COUNT(s.DB_ID) FROM cms_pgy_mst_score s
+		WHERE
+		s.MST_ID=mst.DB_ID)=0
+	</select>
+
+
+	<select id="queryMstAll" parameterType="net.artron.cms.pgymanuscript.model.Pgymanuscript"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		TB.DB_ID AS dbId,
+		TB.CODE AS code,
+		TB.MT_ID AS mtId,
+		TB.MSTTYPE AS
+		msttype,
+		(
+		SELECT
+		mpt.PHOTOURL
+		FROM
+		CMS_PGY_MST_PHOTO mpt
+		WHERE
+		mpt.MST_ID =
+		TB.DB_ID
+		AND
+		mpt.TABINDEX = MIN(pt.TABINDEX)
+		) AS firstpturl
+		<!-- TB.NAME AS name, TB.AUTHOR AS author, TB.DETAILS AS details, TB.MT_GP_ID 
+			AS mtGpId, TB.CHANNEL AS channel, TB.USER_ID AS userId, TB.MSTSTATE1 AS mststate1, 
+			TB.MSTSTATE2 AS mststate2, TB.VOTES AS votes, TB.PHOTONAME AS photoname -->
+		FROM cms_pgy_manuscript TB
+		LEFT JOIN CMS_PGY_MST_PHOTO pt ON pt.MST_ID
+		= TB.DB_ID
+		WHERE 1=1
+
+		and TB.MT_ID = #{mtId}
+
+		<if test=" mtGpId != null and mtGpId !='' ">
+			and TB.MT_GP_ID = #{mtGpId}
+		</if>
+		<if test=" score != null ">
+			<if test=" score ==0 ">
+				and TB.votes=0
+			</if>
+			<if test=" score ==1 ">
+				and TB.votes &gt; 0
+			</if>
+		</if>
+		GROUP BY TB.db_id
+		order by TB.CODE
+	</select>
+
+	<select id="queryMst" parameterType="net.artron.cms.pgymanuscript.model.Pgymanuscript"
+		resultType="net.artron.cms.pgymanuscript.model.Pgymanuscript">
+		SELECT
+		gp.`NAME` AS gpname,
+	<include refid="selectColumnsByPage" />
+		FROM cms_pgy_manuscript TB
+		LEFT JOIN cms_pgy_mt_group gp ON TB.MT_GP_ID = gp.DB_ID
+		WHERE 1=1
+		<if test=" dbId != null and dbId != '' ">
+			and  TB.DB_ID = #{dbId}
+		</if>
+		<if test=" code != null and code != '' ">
+			and TB.CODE = #{code}
+		</if>
+	</select>
+
+
+</mapper>

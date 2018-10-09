@@ -1,0 +1,6 @@
+net\artron\core\mttextupdate.class
+net\artron\core\mttextadd.class
+net\artron\core\SpringContextApplicationTest.class
+net\artron\junit\util\AllTests.class
+net\artron\core\pagetest.class
+net\artron\core\tool\CodeGeneratorTest.class

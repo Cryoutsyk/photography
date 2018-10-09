@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.pgyuser.mapper.PgyuserMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.pgyuser.model.Pgyuser">
+		INSERT INTO cms_pgy_user
+		(
+			DB_ID,
+			NUMBER,
+			PASSWORD,
+			PHONE,
+			NAME,
+			AREA,
+			ID_CARD,
+			EMAIL,
+			REMARK,
+			STATUS,
+			OPEN_ID,
+			TYPE,
+			CREATE_DT,
+			VERSION
+		) 
+		VALUES 
+		( 
+			#{dbId, jdbcType=VARCHAR},
+			#{number, jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR},
+			#{phone, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{area, jdbcType=VARCHAR},
+			#{idCard, jdbcType=VARCHAR},
+			#{email, jdbcType=VARCHAR},
+			#{remark, jdbcType=VARCHAR},
+			#{status, jdbcType=INTEGER},
+			#{openId, jdbcType=VARCHAR},
+			#{type, jdbcType=VARCHAR},
+			#{createDt, jdbcType=TIMESTAMP},
+			#{version, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<sql id="updateAllPage">
+		<if test="number != null" > 
+		TB.NUMBER = #{number},
+		</if>
+		<if test="password != null" > 
+		TB.PASSWORD = #{password},
+		</if>
+		<if test="phone != null" > 
+		TB.PHONE = #{phone},
+		</if>
+		<if test="name != null" > 
+		TB.NAME = #{name},
+		</if>
+		<if test="area != null" > 
+		TB.AREA = #{area},
+		</if>
+		<if test="idCard != null" > 
+		TB.ID_CARD = #{idCard},
+		</if>
+		<if test="email != null" > 
+		TB.EMAIL = #{email},
+		</if>
+		<if test="remark != null" > 
+		TB.REMARK = #{remark},
+		</if>
+		<if test="status != null" > 
+		TB.STATUS = #{status},
+		</if>
+		<if test="openId != null" > 
+		TB.OPEN_ID = #{openId},
+		</if>
+		<if test="type != null" > 
+		TB.TYPE = #{type},
+		</if>
+		<if test="createDt != null" > 
+		TB.CREATE_DT = #{createDt},
+		</if>
+	</sql>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgyuser.model.Pgyuser" >
+     	UPDATE cms_pgy_user TB
+			<set> 
+			<include refid="updateAllPage"/>
+			</set> 
+		 WHERE  1=1
+		 AND TB.DB_ID = #{dbId}
+  	</update>
+  	
+  	<update id="updatepwd" parameterType="net.artron.cms.pgyuser.model.Pgyuser" >
+     	UPDATE cms_pgy_user
+			<set> 
+			password = #{password},
+			</set> 
+		 WHERE  NUMBER = #{number}
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.pgyuser.model.Pgyuser" >
+            DELETE FROM cms_pgy_user WHERE  IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	<sql id="selectAllColumns">
+		TB.DB_ID AS dbId,  
+		TB.NUMBER AS number,  
+		TB.PASSWORD AS password,  
+		TB.PHONE AS phone,  
+		TB.NAME AS name,  
+		TB.AREA AS area,  
+		TB.ID_CARD AS idCard,  
+		TB.EMAIL AS email,  
+		TB.REMARK AS remark,  
+		TB.STATUS AS status,  
+		TB.OPEN_ID AS openId,  
+		TB.TYPE AS type,  
+		TB.CREATE_DT AS createDt,  
+		TB.VERSION AS version  
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.dbId != null" > 
+		and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.number != null" > 
+		and TB.NUMBER = #{queryParam.number}
+		</if>
+		<if test=" queryParam.password != null" > 
+		and TB.PASSWORD = #{queryParam.password}
+		</if>
+		<if test=" queryParam.phone != null" > 
+		and TB.PHONE = #{queryParam.phone}
+		</if>
+		<if test=" queryParam.name != null" > 
+		and TB.NAME = #{queryParam.name}
+		</if>
+		<if test=" queryParam.area != null" > 
+		and TB.AREA = #{queryParam.area}
+		</if>
+		<if test=" queryParam.idCard != null" > 
+		and TB.ID_CARD = #{queryParam.idCard}
+		</if>
+		<if test=" queryParam.email != null" > 
+		and TB.EMAIL = #{queryParam.email}
+		</if>
+		<if test=" queryParam.remark != null" > 
+		and TB.REMARK = #{queryParam.remark}
+		</if>
+		<if test=" queryParam.status != null" > 
+		and TB.STATUS = #{queryParam.status}
+		</if>
+		<if test=" queryParam.openId != null" > 
+		and TB.OPEN_ID = #{queryParam.openId}
+		</if>
+		<if test=" queryParam.type != null" > 
+		and TB.TYPE = #{queryParam.type}
+		</if>
+		<if test=" queryParam.createDt != null" > 
+		and TB.CREATE_DT = #{queryParam.createDt}
+		</if>
+		<if test=" queryParam.version != null" > 
+		and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB. IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_user TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_user TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test="dbId != null" > 
+		and TB.DB_ID = #{dbId}
+		</if>
+		<if test="number != null" > 
+		and TB.NUMBER = #{number}
+		</if>
+		<if test="password != null" > 
+		and TB.PASSWORD = #{password}
+		</if>
+		<if test="phone != null" > 
+		and TB.PHONE = #{phone}
+		</if>
+		<if test="name != null" > 
+		and TB.NAME = #{name}
+		</if>
+		<if test="area != null" > 
+		and TB.AREA = #{area}
+		</if>
+		<if test="idCard != null" > 
+		and TB.ID_CARD = #{idCard}
+		</if>
+		<if test="email != null" > 
+		and TB.EMAIL = #{email}
+		</if>
+		<if test="remark != null" > 
+		and TB.REMARK = #{remark}
+		</if>
+		<if test="status != null" > 
+		and TB.STATUS = #{status}
+		</if>
+		<if test="openId != null" > 
+		and TB.OPEN_ID = #{openId}
+		</if>
+		<if test="type != null" > 
+		and TB.TYPE = #{type}
+		</if>
+		<if test="createDt != null" > 
+		and TB.CREATE_DT = #{createDt}
+		</if>
+		<if test="version != null" > 
+		and TB.VERSION = #{version}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+		and TB. IN
+		  <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if>  
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_user TB 
+	  WHERE 1=1   
+	  <if test="extra != null" >
+	  AND CONCAT(IFNULL(TB.NUMBER,''),IFNULL(TB.EMAIL,''),IFNULL(TB.NAME,'')) like '%${extra}%'
+	  </if> 
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_user TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_user TB  
+          WHERE  TB.DB_ID = #{dbid}
+	</select>
+		
+	<!-- checkphone -->
+	<select id="checkPhone" parameterType="java.lang.String" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_user TB  
+          WHERE  TB.NUMBER = #{phone} 
+	</select>
+	
+	<select id="matchlist" parameterType="java.lang.String" resultType="net.artron.cms.pgymatch.model.Pgymatch">
+	SELECT h.CREATED_DT AS createdDt,h.DB_ID AS dbId,h.NAME AS name,h.COMPETITIONSTATE AS competitionstate 
+	FROM cms_pgy_match h,cms_pgy_manuscript m 
+	WHERE  m.MT_ID=h.DB_ID  
+	AND m.USER_ID = #{userId}
+	</select>
+	
+	<select id="unitlist" parameterType="java.lang.String" resultType="net.artron.cms.pgyuser.model.Pgyuser">
+	 SELECT 
+	 u.DB_ID as dbId,
+	 u.NUMBER,
+	 u.NAME,
+	 u.EMAIL,
+	 u.STATUS,
+	 u.REMARK,
+	 u.CREATE_DT,
+	 u.UPDATE_DT
+	 FROM 
+	 cms_pgy_user u , cms_pgy_manuscript m , cms_pgy_match p 
+	 WHERE 
+	 <if test="extra != null" >
+	 CONCAT(IFNULL(u.NUMBER,''),IFNULL(u.EMAIL,''),IFNULL(u.NAME,'')) like '%${extra}%' and
+	 </if>
+	  u.DB_ID = m.USER_ID and m.MT_ID = p.DB_ID and p.HU_ID = #{code}
+	 </select>
+</mapper>

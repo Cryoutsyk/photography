@@ -1,0 +1,205 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+          "-//Puppy Crawl//DTD Check Configuration 1.3//EN"
+          "http://www.puppycrawl.com/dtds/configuration_1_3.dtd">
+
+<!--
+http://checkstyle.sourceforge.net/index.html
+ -->
+
+<module name = "Checker">
+    <property name="charset" value="UTF-8"/>
+
+    <property name="severity" value="warning"/>
+
+    <property name="fileExtensions" value="java, properties, xml"/>
+
+    <module name="TreeWalker">
+        
+        <!-- 检查所有的interface和class上必须有注释 -->   
+        <module name="JavadocType" />  
+        <module name="JavadocParagraph"/>
+        <module name="AtclauseOrder">
+            <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
+            <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
+        </module>
+        
+        <!-- javadoc的第一行必须以句号结束 -->
+        <!-- <module name="JavadocStyle">
+        	<property name="scope" value="public"/>
+        </module> -->
+        <module name="JavadocVariable">
+		   <property name="scope" value="public"/>
+		</module>
+        
+        <!-- static final 变量必须大写字母加数字 -->
+        <module name="ConstantName">
+		    <property name="format" value="^log(ger)?|[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$"/>
+		</module>
+		<!-- 局部final变量必须字母加数字 -->
+		<module name="LocalFinalVariableName"/>
+		<!-- 局部变量必须字母加数字,且不能是单个字符 -->
+        <module name="LocalVariableName">
+            <property name="tokens" value="VARIABLE_DEF"/>
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <property name="allowOneCharVarInForLoop" value="true"/>
+            <message key="name.invalidPattern"
+             value="Local variable name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 成员变量非final类型变量不能是单个字符 -->
+        <module name="MemberName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+             value="Member name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 方法名必须字母数字且不能少于2位 -->
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9_]*$"/>
+            <message key="name.invalidPattern"
+             value="Method name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 包名的检查（只允许小写字母） -->   
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <message key="name.invalidPattern"
+             value="Package name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 参数名的检查（只允许英文字母或者数字） --> 
+        <module name="ParameterName">
+            <property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+             value="Parameter name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        <!-- 静态非final变量只允许字母加数字的组合 -->
+        <module name="StaticVariableName">
+        	<property name="format" value="^[a-z][a-z0-9][a-zA-Z0-9]*$"/>
+        </module>
+        <!-- 类、接口定义必须为字母加数字的组合,首字母大写 -->
+        <module name="TypeName">
+        	<property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
+            <message key="name.invalidPattern"
+             value="Type name ''{0}'' must match pattern ''{1}''."/>
+        </module>
+        
+		<!-- 不允许import *  -->
+		<module name="AvoidStarImport"/>
+		<!-- 不允许重复导入 -->
+		<module name="RedundantImport"/>
+		<!-- 不能有未使用的导入 -->
+        <module name="UnusedImports">
+            <property name="processJavadoc" value="false"/>
+        </module>
+        <!-- 
+        <module name="CustomImportOrder">
+            <property name="groups" value="/^java\./,javax,org"/>
+            <property name="ordered" value="true"/>
+		    <property name="separated" value="true"/>
+		    <property name="option" value="above"/>
+            <property name="specialImportsRegExp" value="net.artron"/>
+            <property name="sortImportsInGroupAlphabetically" value="true"/>
+            <property name="customImportOrderRules" value="STATIC###SPECIAL_IMPORTS###THIRD_PARTY_PACKAGE###STANDARD_JAVA_PACKAGE"/>
+        </module>
+         -->
+        <!-- 单行最多100个字符 -->
+        <module name="LineLength">
+            <property name="max" value="200"/>
+            <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
+        </module>
+        <!-- 匿名内部类最多60行 -->
+        <module name="AnonInnerLength">
+		      <property name="max" value="60"/>
+		</module>
+		<!-- 方法体最多60行 -->
+		<module name="MethodLength">
+		   <property name="tokens" value="METHOD_DEF"/>
+		   <property name="max" value="60"/>
+		   <property name="countEmpty" value="false"/>
+		</module>
+		<!-- 方法的参数个数最多5个 -->
+		<module name="ParameterNumber">
+		   <property name="max" value="5"/>
+		   <property name="tokens" value="METHOD_DEF"/>
+		</module>
+			
+		<!-- 空格 -->
+		<!-- "<" 和 ">" 之前不能有空格  -->	
+		<!-- 正确形式：
+		public void <K, V extends Number> boolean foo(K, V) {} // Generic methods definitions
+		class name<T1, T2, ..., Tn> {}                         // Generic type definition
+		OrderedPair<String, Box<Integer>> p;                   // Generic type reference
+		boolean same = Util.<Integer, String>compare(p1, p2);  // Generic preceded method name
+		Pair<Integer, String> p1 = new Pair<>(1, "apple");     // Diamond operator
+		List<T> list = ImmutableList.Builder<T>::new;          // Method reference
+		sort(list, Comparable::<String>compareTo);             // Method reference
+		 -->
+		<module name="GenericWhitespace">
+            <message key="ws.followed" value="GenericWhitespace ''{0}'' is followed by whitespace."/>
+             <message key="ws.preceded" value="GenericWhitespace ''{0}'' is preceded with whitespace."/>
+             <message key="ws.illegalFollow" value="GenericWhitespace ''{0}'' should followed by whitespace."/>
+             <message key="ws.notPreceded" value="GenericWhitespace ''{0}'' is not preceded with whitespace."/>
+        </module>
+		<module name="EmptyForIteratorPad"/>
+		<!-- 方法名后紧跟括号，不能有空格 -->
+		<module name="MethodParamPad"/>
+		<module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+		<!-- 操作符不能在行末 -->
+		<module name="OperatorWrap">
+            <property name="option" value="NL"/>
+            <property name="tokens" value="ASSIGN, BAND, BOR, BSR, BXOR, DIV, EQUAL, GE, GT, LAND, LE, LITERAL_INSTANCEOF, LOR, LT, MINUS, MOD, NOT_EQUAL, PLUS, QUESTION, SL, SR, STAR "/>
+        </module>
+		<module name="WhitespaceAround">
+			<property name="tokens" value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, DO_WHILE, EQUAL, GE, GT, LAND, LCURLY, LE, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_IF, LITERAL_RETURN, LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION, RCURLY, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, LITERAL_ASSERT, TYPE_EXTENSION_AND"/>
+            <property name="allowEmptyConstructors" value="true"/>
+            <property name="allowEmptyMethods" value="true"/>
+            <property name="allowEmptyTypes" value="true"/>
+            <property name="allowEmptyLoops" value="true"/>
+            <message key="ws.notFollowed"
+             value="WhitespaceAround: ''{0}'' is not followed by whitespace. Empty blocks may only be represented as '{}' when not part of a multi-block statement (4.1.3)"/>
+             <message key="ws.notPreceded"
+             value="WhitespaceAround: ''{0}'' is not preceded with whitespace."/>
+        </module>
+        <!-- 逗号，分行后有空格 -->
+        <module name="WhitespaceAfter"/>
+        
+        <!-- 非法分隔符 -->
+        <module name="IllegalTokenText">
+            <property name="tokens" value="STRING_LITERAL, CHAR_LITERAL"/>
+            <property name="format" value="\\u00(08|09|0(a|A)|0(c|C)|0(d|D)|22|27|5(C|c))|\\(0(10|11|12|14|15|42|47)|134)"/>
+            <property name="message" value="Avoid using corresponding octal or Unicode escape."/>
+        </module>
+        <!-- switch块必须有默认值 -->
+        <module name="MissingSwitchDefault"/>
+        <!-- 左花括号必须与代码同行 -->
+        <module name="LeftCurly">
+            <property name="maxLineLength" value="100"/>
+        </module>
+        <module name="RightCurly"/>
+        <module name="RightCurly">
+            <property name="option" value="alone"/>
+            <property name="tokens" value="CLASS_DEF, METHOD_DEF, CTOR_DEF, LITERAL_FOR, LITERAL_WHILE, LITERAL_DO, STATIC_INIT, INSTANCE_INIT"/>
+        </module>
+        <module name="EmptyLineSeparator">
+            <property name="allowNoEmptyLineBetweenFields" value="true"/>
+        </module>
+        <!-- 禁用魔法数  -->
+        <module name="MagicNumber"/>
+        <module name="UpperEll"/>
+        <!-- 检查数组类型的定义是String[] args，而不是String args[] -->  
+        <module name="ArrayTypeStyle" />
+        <!-- 变量声明顺序 -->
+        <!--
+        	正确的顺序
+        	1、static变量
+        	2、非static变量
+        	3、构造函数
+        	4、方法 
+         -->
+        <module name="DeclarationOrder"/>
+        <!-- if最多嵌套3层 -->   
+        <module name="NestedIfDepth">
+		    <property name="max" value="3"/>
+		</module>
+
+    </module>
+</module>

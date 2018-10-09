@@ -1,0 +1,11 @@
+{  
+  "title": "接口文档",  
+  "name": "接口文档",  
+  "version": "2.0.0",  
+  "description": "",  
+  "url" : "http://localhost:8080/mars-core",
+  "template": {
+  	"withCompare": true,
+  	"withGenerator": true
+  }
+}

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.pgymtawards.mapper.PgymtawardsMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.pgymtawards.model.Pgymtawards">
+		INSERT INTO cms_pgy_mt_awards
+		(
+			CREATED_BY,
+			CREATED_DT,
+			UPDATED_BY,
+			UPDATED_DT,
+			VERSION,
+			TABINDEX,
+			DB_ID,
+			MT_ID,
+			NAME,
+			AWARDCOUNT
+		) 
+		VALUES 
+		( 
+			#{createdBy, jdbcType=VARCHAR},
+			#{createdDt, jdbcType=TIMESTAMP},
+			#{updatedBy, jdbcType=VARCHAR},
+			#{updatedDt, jdbcType=VARCHAR},
+			#{version, jdbcType=INTEGER},
+			#{tabIndex, jdbcType=INTEGER},
+			#{dbId, jdbcType=VARCHAR},
+			#{mtId, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{awardcount, jdbcType=INTEGER}
+		) 
+	</insert>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgymtawards.model.Pgymtawards" >
+     	UPDATE cms_pgy_mt_awards
+			<set> 
+				<if test=" createdBy != null" > 
+					CREATED_BY = #{createdBy}, 
+				</if>
+				<if test=" createdDt != null" > 
+					CREATED_DT = #{createdDt}, 
+				</if>
+				<if test=" updatedBy != null" > 
+					UPDATED_BY = #{updatedBy}, 
+				</if>
+				<if test=" updatedDt != null" > 
+					UPDATED_DT = #{updatedDt}, 
+				</if>
+				<if test=" version != null" > 
+					VERSION = #{version}, 
+				</if>
+				<if test=" tabIndex != null" > 
+					TABINDEX = #{tabIndex}, 
+				</if>
+				<if test=" mtId != null" > 
+					MT_ID = #{mtId}, 
+				</if>
+				<if test=" name != null" > 
+					NAME = #{name}, 
+				</if>
+				<if test=" awardcount != null" > 
+					AWARDCOUNT = #{awardcount}, 
+				</if>
+			</set> 
+		 WHERE  DB_ID = #{dbId}
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.pgymtawards.model.Pgymtawards" >
+            DELETE FROM cms_pgy_mt_awards WHERE DB_ID IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	  	<delete id="deleteByMtid" parameterType="java.lang.String" >
+            DELETE FROM cms_pgy_mt_awards WHERE MT_ID =	#{mtid}
+  	</delete>
+  	
+  	
+  	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,  
+		TB.CREATED_DT AS createdDt,  
+		TB.UPDATED_BY AS updatedBy,  
+		TB.UPDATED_DT AS updatedDt,  
+		TB.VERSION AS version,  
+		TB.TABINDEX AS tabIndex,  
+		TB.DB_ID AS dbId,  
+		TB.MT_ID AS mtId,  
+		TB.NAME AS name,  
+		TB.AWARDCOUNT AS awardcount  
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.createdBy != null" > 
+		and TB.CREATED_BY = #{queryParam.createdBy}
+		</if>
+		<if test=" queryParam.createdDt != null" > 
+		and TB.CREATED_DT = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.updatedBy != null" > 
+		and TB.UPDATED_BY = #{queryParam.updatedBy}
+		</if>
+		<if test=" queryParam.updatedDt != null" > 
+		and TB.UPDATED_DT = #{queryParam.updatedDt}
+		</if>
+		<if test=" queryParam.version != null" > 
+		and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.tabIndex != null" > 
+		and TB.TABINDEX = #{queryParam.tabIndex}
+		</if>
+		<if test=" queryParam.dbId != null" > 
+		and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.mtId != null" > 
+		and TB.MT_ID = #{queryParam.mtId}
+		</if>
+		<if test=" queryParam.name != null" > 
+		and TB.NAME = #{queryParam.name}
+		</if>
+		<if test=" queryParam.awardcount != null" > 
+		and TB.AWARDCOUNT = #{queryParam.awardcount}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.pgymtawards.model.Pgymtawards">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_mt_awards TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.pgymtawards.model.Pgymtawards">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_mt_awards TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test="createdBy != null" > 
+		and TB.CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDt != null" > 
+		and TB.CREATED_DT = #{createdDt}
+		</if>
+		<if test="updatedBy != null" > 
+		and TB.UPDATED_BY = #{updatedBy}
+		</if>
+		<if test="updatedDt != null" > 
+		and TB.UPDATED_DT = #{updatedDt}
+		</if>
+		<if test="version != null" > 
+		and TB.VERSION = #{version}
+		</if>
+		<if test="tabIndex != null" > 
+		and TB.TABINDEX = #{tabIndex}
+		</if>
+		<if test="dbId != null" > 
+		and TB.DB_ID = #{dbId}
+		</if>
+		<if test="mtId != null" > 
+		and TB.MT_ID = #{mtId}
+		</if>
+		<if test="name != null" > 
+		and TB.NAME = #{name}
+		</if>
+		<if test="awardcount != null" > 
+		and TB.AWARDCOUNT = #{awardcount}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if>  
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.pgymtawards.model.Pgymtawards">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_awards TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.pgymtawards.model.Pgymtawards">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_awards TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.pgymtawards.model.Pgymtawards">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_awards TB  
+          WHERE  TB.DB_ID = #{dbId}
+	</select>  
+	
+	<!-- query by mtid -->
+	<select id="queryByMtId" parameterType="java.lang.String" resultType="net.artron.cms.pgymtawards.model.Pgymtawards">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_awards TB  
+          WHERE  TB.MT_ID = #{mtid}
+	</select>  	
+</mapper>

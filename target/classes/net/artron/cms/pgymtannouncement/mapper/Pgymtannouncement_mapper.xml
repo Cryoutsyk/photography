@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.pgymtannouncement.mapper.PgymtannouncementMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement">
+		INSERT INTO cms_pgy_mt_announcement
+		(
+			CREATED_BY,
+			CREATED_DT,
+			UPDATED_BY,
+			UPDATED_DT,
+			VERSION,
+			TABINDEX,
+			DB_ID,
+			MT_ID,
+			TITLE,
+			AUTHOR,
+			TEXTCONTENT,
+			DETAILEDAWARD,
+			SHOWTYPE
+		) 
+		VALUES 
+		( 
+			#{createdBy, jdbcType=VARCHAR},
+			#{createdDt, jdbcType=TIMESTAMP},
+			#{updatedBy, jdbcType=VARCHAR},
+			#{updatedDt, jdbcType=VARCHAR},
+			#{version, jdbcType=INTEGER},
+			#{tabIndex, jdbcType=INTEGER},
+			#{dbId, jdbcType=VARCHAR},
+			#{mtId, jdbcType=VARCHAR},
+			#{title, jdbcType=VARCHAR},
+			#{author, jdbcType=VARCHAR},
+			#{textcontent, jdbcType=VARCHAR},
+			#{detailedaward, jdbcType=INTEGER},
+			#{showtype, jdbcType=INTEGER}
+		) 
+	</insert>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement" >
+     	UPDATE cms_pgy_mt_announcement
+			<set> 
+				<if test=" updatedBy != null" > 
+					UPDATED_BY = #{updatedBy}, 
+				</if>
+				<if test=" updatedDt != null" > 
+					UPDATED_DT = #{updatedDt}, 
+				</if>
+				<if test=" version != null" > 
+					VERSION = #{version}, 
+				</if>
+				<if test=" tabIndex != null" > 
+					TABINDEX = #{tabIndex}, 
+				</if>
+				<if test=" mtId != null" > 
+					MT_ID = #{mtId}, 
+				</if>
+				<if test=" title != null" > 
+					TITLE = #{title}, 
+				</if>
+				<if test=" author != null" > 
+					AUTHOR = #{author}, 
+				</if>
+				<if test=" textcontent != null" > 
+					TEXTCONTENT = #{textcontent}, 
+				</if>
+				<if test=" detailedaward != null" > 
+					DETAILEDAWARD = #{detailedaward}, 
+				</if>
+				<if test=" showtype != null" > 
+					SHOWTYPE = #{showtype}, 
+				</if>
+			</set> 
+		 WHERE  DB_ID = #{dbId}
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement" >
+            DELETE FROM cms_pgy_mt_announcement WHERE DB_ID IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,  
+		TB.CREATED_DT AS createdDt,  
+		TB.UPDATED_BY AS updatedBy,  
+		TB.UPDATED_DT AS updatedDt,  
+		TB.VERSION AS version,  
+		TB.TABINDEX AS tabIndex,  
+		TB.DB_ID AS dbId,  
+		TB.MT_ID AS mtId,  
+		TB.TITLE AS title,  
+		TB.AUTHOR AS author,  
+		TB.TEXTCONTENT AS textcontent,  
+		TB.DETAILEDAWARD AS detailedaward,  
+		TB.SHOWTYPE AS showtype  
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.mtId != null" > 
+		and TB.MT_ID = #{queryParam.mtId}
+		</if>
+		<if test=" queryParam.title != null" > 
+		and TB.TITLE = #{queryParam.title}
+		</if>
+		<if test=" queryParam.author != null" > 
+		and TB.AUTHOR = #{queryParam.author}
+		</if>
+		<if test=" queryParam.textcontent != null" > 
+		and TB.TEXTCONTENT = #{queryParam.textcontent}
+		</if>
+		<if test=" queryParam.detailedaward != null" > 
+		and TB.DETAILEDAWARD = #{queryParam.detailedaward}
+		</if>
+		<if test=" queryParam.showtype != null" > 
+		and TB.SHOWTYPE = #{queryParam.showtype}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_mt_announcement TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_mt_announcement TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test="dbId != null" > 
+		and TB.DB_ID = #{dbId}
+		</if>
+		<if test="mtId != null" > 
+		and TB.MT_ID = #{mtId}
+		</if>
+		<if test="title != null" > 
+		and TB.TITLE = #{title}
+		</if>
+		<if test="author != null" > 
+		and TB.AUTHOR = #{author}
+		</if>
+		<if test="textcontent != null" > 
+		and TB.TEXTCONTENT = #{textcontent}
+		</if>
+		<if test="detailedaward != null" > 
+		and TB.DETAILEDAWARD = #{detailedaward}
+		</if>
+		<if test="showtype != null" > 
+		and TB.SHOWTYPE = #{showtype}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if>  
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_announcement TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_announcement TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.pgymtannouncement.model.Pgymtannouncement">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mt_announcement TB  
+          WHERE  TB.DB_ID = #{dbId}
+	</select>  
+		
+</mapper>

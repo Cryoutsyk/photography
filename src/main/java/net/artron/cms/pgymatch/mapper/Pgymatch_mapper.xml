@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.artron.cms.pgymatch.mapper.PgymatchMapper">
+
+	<!-- save -->
+	<insert id="save" parameterType="net.artron.cms.pgymatch.model.Pgymatch">
+		INSERT INTO cms_pgy_match
+		(
+		CREATED_BY,
+		CREATED_DT,
+		UPDATED_BY,
+		UPDATED_DT,
+		VERSION,
+		TABINDEX,
+		DB_ID,
+		CODE,
+		HU_ID,
+		NAME,
+		DRAFTSTARTTIME,
+		DRAFTENDTIME,
+		HOMEBIGIMG,
+		COVERBIGIMG,
+		ORGANIZER,
+		COORGANIZER,
+		HIGHESTREWARD,
+		INDIVIDUALLIMIT,
+		ONLINESTATE,
+		COMPETITIONSTATE
+		)
+		VALUES
+		(
+		#{createdBy, jdbcType=VARCHAR},
+		#{createdDt,
+		jdbcType=TIMESTAMP},
+		#{updatedBy, jdbcType=VARCHAR},
+		#{updatedDt,
+		jdbcType=VARCHAR},
+		#{version, jdbcType=INTEGER},
+		#{tabIndex,
+		jdbcType=INTEGER},
+		#{dbId, jdbcType=VARCHAR},
+		#{code, jdbcType=VARCHAR},
+		#{huid, jdbcType=VARCHAR},
+		#{name, jdbcType=VARCHAR},
+		#{draftstarttime,
+		jdbcType=TIMESTAMP},
+		#{draftendtime, jdbcType=TIMESTAMP},
+		#{homebigimg,
+		jdbcType=VARCHAR},
+		#{coverbigimg, jdbcType=VARCHAR},
+		#{organizer,
+		jdbcType=VARCHAR},
+		#{coorganizer, jdbcType=VARCHAR},
+		#{highestreward,
+		jdbcType=VARCHAR},
+		#{individuallimit, jdbcType=INTEGER},
+		#{onlinestate,
+		jdbcType=INTEGER},
+		#{competitionstate, jdbcType=VARCHAR}
+		)
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgymatch.model.Pgymatch">
+		UPDATE cms_pgy_match
+		<set>
+			<if test=" updatedBy != null">
+				UPDATED_BY = #{updatedBy},
+			</if>
+			<if test=" version != null">
+				VERSION = #{version}+1,
+			</if>
+			<if test=" tabIndex != null">
+				TABINDEX = #{tabIndex},
+			</if>
+			<if test=" code != null">
+				CODE = #{code},
+			</if>
+			<!-- <if test=" huid != null"> HU_ID = #{huid}, </if> -->
+			<if test=" name != null">
+				NAME = #{name},
+			</if>
+			<if test=" draftstarttime != null">
+				DRAFTSTARTTIME = #{draftstarttime},
+			</if>
+			<if test=" draftendtime != null">
+				DRAFTENDTIME = #{draftendtime},
+			</if>
+			<if test=" homebigimg != null">
+				HOMEBIGIMG = #{homebigimg},
+			</if>
+			<if test=" coverbigimg != null">
+				COVERBIGIMG = #{coverbigimg},
+			</if>
+			<if test=" organizer != null">
+				ORGANIZER = #{organizer},
+			</if>
+			<if test=" coorganizer != null">
+				COORGANIZER = #{coorganizer},
+			</if>
+			<if test=" highestreward != null">
+				HIGHESTREWARD = #{highestreward},
+			</if>
+			<if test=" individuallimit != null">
+				INDIVIDUALLIMIT = #{individuallimit},
+			</if>
+		</set>
+		WHERE DB_ID = #{dbId}
+		<!-- and VERSION = #{version} -->
+	</update>
+
+	<!-- update onlinestate -->
+	<update id="updateOnline" parameterType="Map">
+		UPDATE cms_pgy_match
+		<set>
+			<!-- UPDATED_BY = #{updatedBy}, -->
+			<!-- VERSION = #{version}+1, -->
+			ONLINESTATE = #{onlinestate},
+			COMPETITIONSTATE = #{competitionstate}
+		</set>
+		WHERE DB_ID = #{dbId}
+		<!-- and VERSION = #{version} -->
+	</update>
+
+	<!-- update competitionstate -->
+	<update id="updateCompetition" parameterType="Map">
+		UPDATE cms_pgy_match
+		<set>
+			<!-- UPDATED_BY = #{updatedBy}, -->
+			<!-- VERSION = #{version}+1, -->
+			COMPETITIONSTATE = #{competitionstate}
+		</set>
+		WHERE DB_ID = #{dbId}
+		<!-- and VERSION = #{version} -->
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="net.artron.cms.pgymatch.model.Pgymatch">
+		DELETE FROM cms_pgy_match WHERE DB_ID IN
+		<foreach item="dbid" index="index" collection="dbIds" open="("
+			separator="," close=")">
+			#{dbid}
+		</foreach>
+	</delete>
+
+	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,
+		TB.CREATED_DT AS createdDt,
+		TB.UPDATED_BY AS updatedBy,
+		TB.UPDATED_DT AS updatedDt,
+		TB.VERSION AS
+		version,
+		TB.TABINDEX AS tabIndex,
+		TB.DB_ID AS dbId,
+		TB.CODE AS code,
+		TB.HU_ID AS huid,
+		TB.NAME AS name,
+		TB.DRAFTSTARTTIME AS draftstarttime,
+		TB.DRAFTENDTIME AS
+		draftendtime,
+		TB.HOMEBIGIMG AS homebigimg,
+		TB.COVERBIGIMG AS
+		coverbigimg,
+		TB.ORGANIZER AS organizer,
+		TB.COORGANIZER
+		AS coorganizer,
+		TB.HIGHESTREWARD AS highestreward,
+		TB.INDIVIDUALLIMIT AS
+		individuallimit,
+		TB.ONLINESTATE AS onlinestate,
+		TB.COMPETITIONSTATE AS
+		competitionstate,
+
+		( case
+		TB.ONLINESTATE WHEN 0 THEN '下线' WHEN 1 THEN
+		'上线' END ) AS onlinestatetext,
+		(case WHEN TB.COMPETITIONSTATE='1' THEN
+		'征稿中'
+		WHEN CAST(TB.COMPETITIONSTATE as SIGNED) &gt; 1 and
+		CAST(TB.COMPETITIONSTATE as SIGNED) &lt; 9 THEN '评选中'
+		WHEN
+		TB.COMPETITIONSTATE='9' THEN '公示中'
+		WHEN TB.COMPETITIONSTATE='10' THEN
+		'已结束'
+		ELSE
+		'未开始'
+		END
+		) AS competitionstatetext,
+      (SELECT COUNT(db_id) from cms_pgy_manuscript WHERE mt_id=TB.db_id) as mstcount
+	</sql>
+
+	<sql id="queryWhereWithPage">
+		<if test=" queryParam.createdBy != null">
+			and TB.CREATED_BY = #{queryParam.createdBy}
+		</if>
+		<!-- <if test=" queryParam.createdDt != null" > and TB.CREATED_DT = #{queryParam.createdDt} 
+			</if> -->
+		<if test=" queryParam.updatedBy != null">
+			and TB.UPDATED_BY = #{queryParam.updatedBy}
+		</if>
+		<!-- <if test=" queryParam.updatedDt != null" > and TB.UPDATED_DT = #{queryParam.updatedDt} 
+			</if> -->
+		<if test=" queryParam.version != null">
+			and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.tabIndex != null">
+			and TB.TABINDEX = #{queryParam.tabIndex}
+		</if>
+		<if test=" queryParam.dbId != null">
+			and TB.DB_ID = #{queryParam.dbId}
+		</if>
+
+		<if test=" queryParam.code != null">
+			and TB.CODE = #{queryParam.code}
+		</if>
+
+		<if test=" queryParam.huid != null">
+			and TB.HU_ID = #{queryParam.huid}
+		</if>
+
+		<if test=" queryParam.name != null">
+			and TB.NAME = #{queryParam.name}
+		</if>
+		<if test=" queryParam.organizer != null">
+			and TB.ORGANIZER = #{queryParam.organizer}
+		</if>
+
+		<if test=" queryParam.draftstarttime != null">
+			and TB.DRAFTSTARTTIME = #{queryParam.draftstarttime}
+		</if>
+		<if test=" queryParam.draftendtime != null">
+			and TB.DRAFTENDTIME = #{queryParam.draftendtime}
+		</if>
+		<if test=" queryParam.homebigimg != null">
+			and TB.HOMEBIGIMG = #{queryParam.homebigimg}
+		</if>
+		<if test=" queryParam.coverbigimg != null">
+			and TB.COVERBIGIMG = #{queryParam.coverbigimg}
+		</if>
+		<if test=" queryParam.coorganizer != null">
+			and TB.COORGANIZER = #{queryParam.coorganizer}
+		</if>
+		<if test=" queryParam.highestreward != null">
+			and TB.HIGHESTREWARD = #{queryParam.highestreward}
+		</if>
+		<if test=" queryParam.individuallimit != null">
+			and TB.INDIVIDUALLIMIT = #{queryParam.individuallimit}
+		</if>
+		<if test=" queryParam.onlinestate != null">
+			and TB.ONLINESTATE = #{queryParam.onlinestate}
+		</if>
+		<if test=" queryParam.competitionstate != null">
+			and TB.COMPETITIONSTATE = #{queryParam.competitionstate}
+		</if>
+		<if
+			test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+			and TB.DB_ID IN
+			<foreach item="dbid" index="index" collection="queryParam.dbIds"
+				open="(" separator="," close=")">
+				#{dbid}
+			</foreach>
+		</if>
+	</sql>
+
+	<select id="queryMaxCode" resultType="Integer" parameterType="java.lang.String">
+		SELECT MAX( CAST(right(TB.CODE,2) AS SIGNED)) as maxcode from
+		cms_pgy_match TB
+		WHERE TB.CODE LIKE concat(#{nyr },'%')
+	</select>
+
+	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel"
+		resultType="net.artron.cms.pgymatch.model.Pgymatch">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_match TB
+		WHERE 1=1
+		<include refid="queryWhere_Page" />
+		order by TB.CREATED_DT desc
+	</select>
+	<sql id="queryWhere_Page">
+		<if test=" queryParam.huid != null and queryParam.huid != '' ">
+			and TB.HU_ID = #{queryParam.huid}
+		</if>
+
+
+
+		<if test=" queryParam.code != null and queryParam.code !='' ">
+			and ( TB.CODE LIKE concat('%', #{queryParam.code},'%')
+			or
+			TB.NAME LIKE concat('%', #{queryParam.code},'%')
+			or TB.ORGANIZER LIKE
+			concat('%', #{queryParam.code},'%')
+			)
+		</if>
+
+		<if
+			test=" queryParam.competitionstate != null and queryParam.competitionstate !='' ">
+			<choose>
+				<when test="queryParam.competitionstate == '2'.toString() ">
+					and CAST(TB.COMPETITIONSTATE as SIGNED) &gt; 1 and
+					CAST(TB.COMPETITIONSTATE as SIGNED) &lt; 9
+				</when>
+				<otherwise>
+					and TB.COMPETITIONSTATE = #{queryParam.competitionstate}
+				</otherwise>
+			</choose>
+		</if>
+
+		<!-- <trim prefix="(" suffix=")" suffixOverrides=","> <choose> <when test="item.id 
+			!= null and item.id !=''"> #{item.id,jdbcType=CHAR}, </when> <otherwise> 
+			'', </otherwise> </choose> <choose> <when test="item.userType != null and 
+			item.userType !=''"> #{item.userType,jdbcType=VARCHAR}, </when> <otherwise> 
+			'', </otherwise> </choose> </trim> -->
+
+
+	</sql>
+
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel"
+		resultType="net.artron.cms.pgymatch.model.Pgymatch">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_match TB
+		WHERE 1=1
+		<include refid="queryWhereWithPage" />
+	</select>
+
+	<sql id="queryWhereWithEntity">
+		<!-- <if test="createdBy != null"> and TB.CREATED_BY = #{createdBy} </if> 
+			<if test="createdDt != null"> and TB.CREATED_DT = #{createdDt} </if> <if 
+			test="updatedBy != null"> and TB.UPDATED_BY = #{updatedBy} </if> <if test="updatedDt 
+			!= null"> and TB.UPDATED_DT = #{updatedDt} </if> <if test="version != null"> 
+			and TB.VERSION = #{version} </if> <if test="tabIndex != null"> and TB.TABINDEX 
+			= #{tabIndex} </if> <if test="dbId != null"> and TB.DB_ID = #{dbId} </if> 
+			 -->
+		<if test="huid != null  and huid !=''  ">
+			and TB.HU_ID = #{huid}
+		</if>
+		<if test="code != null and code != '' "> 
+		and TB.CODE = #{code}
+		 </if>
+		<!-- <if test="name != null"> and TB.NAME = #{name} </if> <if test="draftstarttime 
+			!= null"> and TB.DRAFTSTARTTIME = #{draftstarttime} </if> <if test="draftendtime 
+			!= null"> and TB.DRAFTENDTIME = #{draftendtime} </if> <if test="homebigimg 
+			!= null"> and TB.HOMEBIGIMG = #{homebigimg} </if> <if test="coverbigimg != 
+			null"> and TB.COVERBIGIMG = #{coverbigimg} </if> <if test="organizer != null"> 
+			and TB.ORGANIZER = #{organizer} </if> <if test="coorganizer != null"> and 
+			TB.COORGANIZER = #{coorganizer} </if> <if test="highestreward != null"> and 
+			TB.HIGHESTREWARD = #{highestreward} </if> <if test="individuallimit != null"> 
+			and TB.INDIVIDUALLIMIT = #{individuallimit} </if> <if test="onlinestate != 
+			null"> and TB.ONLINESTATE = #{onlinestate} </if> <if test="competitionstate 
+			!= null"> and TB.COMPETITIONSTATE = #{competitionstate} </if> <if test="dbIds 
+			!= null &amp;&amp; dbIds.size() &gt; 0"> and TB.DB_ID IN <foreach item="dbid" 
+			index="index" collection="dbIds" open="(" separator="," close=")"> #{dbid} 
+			</foreach> </if> -->
+	</sql>
+
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity"
+		resultType="net.artron.cms.pgymatch.model.Pgymatch">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_match TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity"
+		resultType="net.artron.cms.pgymatch.model.Pgymatch">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_match TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String"
+		resultType="net.artron.cms.pgymatch.model.Pgymatch">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_match TB
+		WHERE TB.DB_ID = #{dbId}
+	</select>
+
+	<!-- query COMPETITIONSTATE by id -->
+	<select id="queryStateById" parameterType="java.lang.String"
+		resultType="String">
+		SELECT COMPETITIONSTATE from cms_pgy_match WHERE DB_ID =
+		#{dbId}
+	</select>
+	<select id="queryAllYear" parameterType="java.lang.String"
+		resultType="String">
+		SELECT DATE_FORMAT(CREATED_DT, '%Y-%m')as year from cms_pgy_match GROUP BY DATE_FORMAT(CREATED_DT, '%Y-%m')  
+	</select>
+    <select id="queryAwardUser" parameterType="Map" resultType="net.artron.cms.pgymatch.model.Pgymatch">
+        SELECT 
+        h.CREATED_DT AS createdDt,h.DB_ID AS dbId,h.NAME AS name
+        FROM 
+        cms_pgy_match h,cms_pgy_manuscript m,cms_pgy_mt_awardsinfo a 
+        WHERE 
+        m.MT_ID=h.DB_ID 
+        AND 
+        a.MST_ID=m.DB_ID 
+        AND 
+        m.USER_ID = #{userId} 
+        AND h.DB_ID = #{dbId}
+    </select>
+	<select id="queryIndex" parameterType="PageModel"
+			resultType="net.artron.cms.pgymatch.model.Pgymatch">
+			SELECT * FROM cms_pgy_match TB WHERE 1=1
+			<if test=" queryParam.date != null">
+				and TB.CREATED_DT  like concat('%',#{queryParam.date},'%')
+			</if>
+			<if test=" queryParam.name != null">
+				AND CONCAT(TB.name,TB.organizer) LIKE '%' #{queryParam.name} '%'
+			</if>
+			<if test=" queryParam.competitionstate != null">
+				and TB.COMPETITIONSTATE = #{queryParam.competitionstate}
+			</if>
+			order by TB.CREATED_DT desc
+	</select>
+</mapper>

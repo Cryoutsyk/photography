@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.pgymstscore.mapper.PgymstscoreMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.pgymstscore.model.Pgymstscore">
+		INSERT INTO cms_pgy_mst_score
+		(
+			CREATED_BY,
+			CREATED_DT,
+			UPDATED_BY,
+			UPDATED_DT,
+			VERSION,
+			TABINDEX,
+			DB_ID,
+			MST_ID,
+			score
+		) 
+		VALUES 
+		( 
+			#{createdBy, jdbcType=VARCHAR},
+			#{createdDt, jdbcType=TIMESTAMP},
+			#{updatedBy, jdbcType=VARCHAR},
+			#{updatedDt, jdbcType=VARCHAR},
+			#{version, jdbcType=INTEGER},
+			#{tabIndex, jdbcType=INTEGER},
+			#{dbId, jdbcType=VARCHAR},
+			#{mstId, jdbcType=VARCHAR},
+			#{score, jdbcType=INTEGER}
+		) 
+	</insert>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgymstscore.model.Pgymstscore" >
+     	UPDATE cms_pgy_mst_score
+			<set> 
+				<if test=" createdBy != null" > 
+					CREATED_BY = #{createdBy}, 
+				</if>
+				<if test=" createdDt != null" > 
+					CREATED_DT = #{createdDt}, 
+				</if>
+				<if test=" updatedBy != null" > 
+					UPDATED_BY = #{updatedBy}, 
+				</if>
+				<if test=" updatedDt != null" > 
+					UPDATED_DT = #{updatedDt}, 
+				</if>
+				<if test=" version != null" > 
+					VERSION = #{version}, 
+				</if>
+				<if test=" tabIndex != null" > 
+					TABINDEX = #{tabIndex}, 
+				</if>
+				<if test=" mstId != null" > 
+					MST_ID = #{mstId}, 
+				</if>
+				<if test=" score != null" > 
+					score = #{score}, 
+				</if>
+			</set> 
+		 WHERE  DB_ID = #{dbId}
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.pgymstscore.model.Pgymstscore" >
+            DELETE FROM cms_pgy_mst_score WHERE DB_ID IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,  
+		TB.CREATED_DT AS createdDt,  
+		TB.UPDATED_BY AS updatedBy,  
+		TB.UPDATED_DT AS updatedDt,  
+		TB.VERSION AS version,  
+		TB.TABINDEX AS tabIndex,  
+		TB.DB_ID AS dbId,  
+		TB.MST_ID AS mstId,  
+		TB.score AS score  
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.createdBy != null" > 
+		and TB.CREATED_BY = #{queryParam.createdBy}
+		</if>
+		<if test=" queryParam.createdDt != null" > 
+		and TB.CREATED_DT = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.updatedBy != null" > 
+		and TB.UPDATED_BY = #{queryParam.updatedBy}
+		</if>
+		<if test=" queryParam.updatedDt != null" > 
+		and TB.UPDATED_DT = #{queryParam.updatedDt}
+		</if>
+		<if test=" queryParam.version != null" > 
+		and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.tabIndex != null" > 
+		and TB.TABINDEX = #{queryParam.tabIndex}
+		</if>
+		<if test=" queryParam.dbId != null" > 
+		and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.mstId != null" > 
+		and TB.MST_ID = #{queryParam.mstId}
+		</if>
+		<if test=" queryParam.score != null" > 
+		and TB.score = #{queryParam.score}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB.DB_ID IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.pgymstscore.model.Pgymstscore">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_mst_score TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.pgymstscore.model.Pgymstscore">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_mst_score TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test=" dbId != null and dbId != '' " > 
+		and TB.DB_ID = #{dbId}
+		</if>
+		<if test="mstId != null and mstId != '' " > 
+		and TB.MST_ID = #{mstId}
+		</if>
+		<if test="score != null" > 
+		and TB.score = #{score}
+		</if>
+		
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.pgymstscore.model.Pgymstscore">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mst_score TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+    	order by TB.TABINDEX
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.pgymstscore.model.Pgymstscore">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mst_score TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.pgymstscore.model.Pgymstscore">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_mst_score TB  
+          WHERE  TB.DB_ID = #{dbId}
+	</select>  
+		
+</mapper>

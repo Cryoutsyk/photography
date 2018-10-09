@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.artron.application.mapper.AgencyMapper">
+<!-- 
+	<insert id="save" parameterType="com.nmgjc.application.service.Agency">
+		insert into APP_AGENCY (DBID,
+			CODE,
+			NAME,
+			STATUS,
+			TABINDEX,
+			CURRENTYEAR)
+		values (
+			#{dbId},
+			#{code},
+			#{name},
+			#{status},
+			#{tabIndex},
+			#{currentYear}
+			)
+	</insert>
+	
+	 <select id="queryByPage" parameterType="PageModel" resultType="com.nmgjc.application.service.Agency">
+	 	select v.DBID AS dbId, v.CODE AS code, v.NAME AS name from APP_AGENCY v
+	 	where 1 =1
+	 	<if test="queryParam.code != null" >
+	       and  v.CODE = #{queryParam.code, jdbcType=VARCHAR}
+	    </if> 
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+			and v.DBID IN
+			<foreach item="dbid" index="index" collection="queryParam.dbIds"	open="(" separator="," close=")">
+				#{dbid}
+			</foreach> 
+		</if>  
+		order by v.DBID
+	 </select>
+	 
+	 <select id="queryPageWithAuth" parameterType="PageModel" resultType="com.nmgjc.application.service.Agency">
+	 	select v.DBID AS dbId, v.CODE AS code, v.NAME AS name from APP_AGENCY v
+	 	where 1 =1
+	 	<if test="queryParam.code != null" >
+	       and  v.CODE = #{queryParam.code}
+	    </if> 
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+			and v.DBID IN
+			<foreach item="dbid" index="index" collection="queryParam.dbIds"	open="(" separator="," close=")">
+				#{dbid}
+			</foreach> 
+		</if>  
+		order by v.DBID
+	 </select>
+	  -->
+</mapper>

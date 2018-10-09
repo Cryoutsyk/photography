@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+	xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI"
+	typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath"
+	targetNamespace="http://activiti.org/test">
+	<process id="EditorProcess" name="流程1" isExecutable="true">
+		<startEvent id="startNode" name="开始"></startEvent>
+		<userTask id="one" name="第一步">
+			<extensionElements>
+				<activiti:taskListener event="create"
+					expression="${activitiNodeService.assign(task, task.eventName)}" />
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="sid-3B2AB45C-D789-4D7F-A797-04E74204F651"
+			sourceRef="startNode" targetRef="one"></sequenceFlow>
+		<userTask id="two" name="第二步">
+			<extensionElements>
+				<activiti:taskListener event="create"
+					expression="${activitiNodeService.assign(task, task.eventName)}" />
+			</extensionElements>
+		</userTask>
+		<sequenceFlow id="sid-49256EA1-5A66-4F11-A775-825FC208EB5B"
+			sourceRef="one" targetRef="two"></sequenceFlow>
+		<endEvent id="endNode" name="结束"></endEvent>
+		<sequenceFlow id="sid-8DB78CE4-CBE4-432F-B03B-8799659AA2FF"
+			sourceRef="two" targetRef="endNode"></sequenceFlow>
+	</process>
+	<bpmndi:BPMNDiagram id="BPMNDiagram_EditorProcess">
+		<bpmndi:BPMNPlane bpmnElement="EditorProcess"
+			id="BPMNPlane_EditorProcess">
+			<bpmndi:BPMNShape bpmnElement="startNode" id="BPMNShape_startNode">
+				<omgdc:Bounds height="30.0" width="30.0" x="46.0" y="61.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="one" id="BPMNShape_one">
+				<omgdc:Bounds height="80.0" width="100.0" x="121.0" y="36.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="two" id="BPMNShape_two">
+				<omgdc:Bounds height="80.0" width="100.0" x="266.0" y="36.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNShape bpmnElement="endNode" id="BPMNShape_endNode">
+				<omgdc:Bounds height="28.0" width="28.0" x="411.0" y="62.0"></omgdc:Bounds>
+			</bpmndi:BPMNShape>
+			<bpmndi:BPMNEdge bpmnElement="sid-49256EA1-5A66-4F11-A775-825FC208EB5B"
+				id="BPMNEdge_sid-49256EA1-5A66-4F11-A775-825FC208EB5B">
+				<omgdi:waypoint x="221.0" y="76.0"></omgdi:waypoint>
+				<omgdi:waypoint x="266.0" y="76.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="sid-3B2AB45C-D789-4D7F-A797-04E74204F651"
+				id="BPMNEdge_sid-3B2AB45C-D789-4D7F-A797-04E74204F651">
+				<omgdi:waypoint x="76.0" y="76.0"></omgdi:waypoint>
+				<omgdi:waypoint x="121.0" y="76.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+			<bpmndi:BPMNEdge bpmnElement="sid-8DB78CE4-CBE4-432F-B03B-8799659AA2FF"
+				id="BPMNEdge_sid-8DB78CE4-CBE4-432F-B03B-8799659AA2FF">
+				<omgdi:waypoint x="366.0" y="76.0"></omgdi:waypoint>
+				<omgdi:waypoint x="411.0" y="76.0"></omgdi:waypoint>
+			</bpmndi:BPMNEdge>
+		</bpmndi:BPMNPlane>
+	</bpmndi:BPMNDiagram>
+</definitions>

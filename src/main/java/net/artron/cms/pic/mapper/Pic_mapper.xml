@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.pic.mapper.PicMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.pic.model.Pic">
+		INSERT INTO cms_pgy_pic
+		(
+			db_id,
+			img_url,
+			status,
+			created_dt,
+			version,
+			tab_index,
+			url_id
+		) 
+		VALUES 
+		( 
+			#{dbId, jdbcType=VARCHAR},
+			#{imgUrl, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createdDt, jdbcType=TIMESTAMP},
+			#{version, jdbcType=VARCHAR},
+			#{tabIndex, jdbcType=INTEGER},
+			#{urlId, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pic.model.Pic" >
+     	UPDATE cms_pgy_pic
+			<set> 
+				<if test=" imgUrl != null" > 
+					img_url = #{imgUrl}, 
+				</if>
+				<if test=" status != null" > 
+					status = #{status}, 
+				</if>
+				<if test=" createdDt != null" > 
+					created_dt = #{createdDt}, 
+				</if>
+				<if test=" version != null" > 
+					version = #{version}, 
+				</if>
+				<if test=" tabIndex != null" > 
+					tab_index = #{tabIndex}, 
+				</if>
+				<if test=" urlId != null" > 
+					url_id = #{urlId}, 
+				</if>
+			</set> 
+			<if test=" dbId != null" > 
+				 WHERE  db_id = #{dbId}
+			</if>
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.pic.model.Pic" >
+            DELETE FROM cms_pgy_pic WHERE db_id IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	<sql id="selectAllColumns">
+		TB.db_id AS dbId,  
+		TB.img_url AS imgUrl,  
+		TB.status AS status,  
+		TB.created_dt AS createdDt,  
+		TB.version AS version,  
+		TB.tab_index AS tabIndex,  
+		TB.url_id AS urlId  
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.dbId != null" > 
+		and TB.db_id = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.imgUrl != null" > 
+		and TB.img_url = #{queryParam.imgUrl}
+		</if>
+		<if test=" queryParam.status != null" > 
+		and TB.status = #{queryParam.status}
+		</if>
+		<if test=" queryParam.createdDt != null" > 
+		and TB.created_dt = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.urlId != null" > 
+		and TB.url_id = #{queryParam.urlId}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB.db_id IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.pic.model.Pic">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_pic TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.pic.model.Pic">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_pic TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test="dbId != null" > 
+		and TB.db_id = #{dbId}
+		</if>
+		<if test="imgUrl != null" > 
+		and TB.img_url = #{imgUrl}
+		</if>
+		<if test="status != null" > 
+		and TB.status = #{status}
+		</if>
+		<if test="createdDt != null" > 
+		and TB.created_dt = #{createdDt}
+		</if>
+		<if test="version != null" > 
+		and TB.version = #{version}
+		</if>
+		<if test="urlId != null" > 
+		and TB.url_id = #{urlId}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+		and TB.db_id IN
+		  <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if>  
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.pic.model.Pic">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_pic TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.pic.model.Pic">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_pic TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.pic.model.Pic">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_pic TB  
+          WHERE  TB.db_id = #{dbId}
+	</select>  
+		
+</mapper>

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+		version="2.0">
+
+	<description>JC Tag library</description>
+	<display-name>JC</display-name>
+	<tlib-version>1.0</tlib-version>
+	<short-name>JC</short-name>
+	<uri>http://www.nmgjc.com/jsp/tag/JC</uri>
+	
+	<!-- menu -->
+	<tag>
+		<description>generate the menu</description>
+		<name>menu</name>
+		<tag-class>com.nmgjc.core.web.tag.html.MenuTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<description>加载菜单时用到的模板，必须指定WEB-INF/templates目录的子目录</description>
+			<name>templateName</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag> 
+	<!-- url -->
+	<tag>
+		<description>import content</description>
+		<name>url</name>
+		<tag-class>com.nmgjc.core.web.tag.html.UrlImportTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>the url path of the content</description>
+			<name>url</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<tag>
+		<description>Adds a parameter to a containing 'import' tag's URL.</description>
+		<name>param</name>
+		<tag-class>org.apache.taglibs.standard.tag.rt.core.ParamTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>Name of the query string parameter.</description>
+			<name>name</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Value of the parameter.</description>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- load resources -->
+	<tag>
+		<description>load resources</description>
+		<name>LoadResource</name>
+		<tag-class>com.nmgjc.core.web.tag.html.LoadResourceTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>the type that will be loaded of the resource</description>
+			<name>type</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>versionResource</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>compressResource</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>the url path of the content</description>
+			<name>src</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- data jqgrid -->
+	<tag>
+		<description>data jqGrid</description>
+		<name>grid</name>
+		<tag-class>com.nmgjc.core.web.tag.html.GridTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>url</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute> 
+		<attribute>
+			<name>colNames</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>colNameItems</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>colModel</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>pager</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>options</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>buttons</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>buttonItems</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>needResizeGrid</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>colModelClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>colModelStr</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+	</tag>
+	
+	
+	
+	
+	
+	
+	<!-- ============================ html ====================================== -->
+	
+	
+	
+	
+	<!-- linkbutton -->
+	<tag>
+		<description>linkbutton</description>
+		<name>linkbutton</name>
+		<tag-class>com.nmgjc.core.web.tag.html.LinkbuttonTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>param</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>messageKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>test</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+	</tag>
+ 	<!-- org -->
+	<tag>
+		<description>orgTreeList</description>
+		<name>org</name>
+		<tag-class>com.nmgjc.core.web.tag.html.OrgTreeTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>gridId</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>title</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>height</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>messageKey</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>  
+		<attribute>
+			<description></description>
+			<name>onClickRow</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>checkbox</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute> 
+		<attribute>
+			<description></description>
+			<name>pagination</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>columns</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>templateName</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+	<!-- orgComboxTree -->
+	<tag>
+		<description>orgComboxTree</description>
+		<name>orgComboTree</name>
+		<tag-class>com.nmgjc.core.web.tag.html.OrgComboTreeTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>style</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue> 
+		</attribute>
+		<attribute>
+			<name>required</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>boolean</type>
+		</attribute>
+	</tag>
+	<!-- dataCombogrid -->
+	<tag>
+		<description>dataCombogrid</description>
+		<name>dataCombogrid</name>
+		<tag-class>com.nmgjc.core.web.tag.html.DataCombogridTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>id</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>name</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>value</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>width</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>height</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>dataType</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description></description>
+			<name>checkbox</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute> 
+		<attribute>
+			<name>style</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+</taglib>

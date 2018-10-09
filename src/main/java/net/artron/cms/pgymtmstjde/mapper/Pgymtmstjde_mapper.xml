@@ -1,0 +1,382 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.artron.cms.pgymtmstjde.mapper.PgymtmstjdeMapper">
+
+	<!-- save -->
+	<insert id="save" parameterType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		INSERT INTO cms_pgy_mt_mst_jde
+		(
+		CREATED_BY,
+		CREATED_DT,
+		UPDATED_BY,
+		UPDATED_DT,
+		VERSION,
+		TABINDEX,
+		DB_ID,
+		MT_ID,
+		MST_ID,
+		JDE_ID,
+		AUDITSTATE
+		)
+		VALUES
+		(
+		#{createdBy, jdbcType=VARCHAR},
+		#{createdDt, jdbcType=TIMESTAMP},
+		#{updatedBy, jdbcType=VARCHAR},
+		#{updatedDt, jdbcType=VARCHAR},
+		#{version, jdbcType=INTEGER},
+		#{tabIndex, jdbcType=INTEGER},
+		#{dbId, jdbcType=VARCHAR},
+		#{mtId,
+		jdbcType=VARCHAR},
+		#{mstId, jdbcType=VARCHAR},
+		#{jdeId,
+		jdbcType=VARCHAR},
+		#{auditstate, jdbcType=INTEGER}
+		)
+	</insert>
+
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		UPDATE cms_pgy_mt_mst_jde
+		<set>
+			<if test=" createdBy != null">
+				CREATED_BY = #{createdBy},
+			</if>
+			<if test=" createdDt != null">
+				CREATED_DT = #{createdDt},
+			</if>
+			<if test=" updatedBy != null">
+				UPDATED_BY = #{updatedBy},
+			</if>
+			<if test=" updatedDt != null">
+				UPDATED_DT = #{updatedDt},
+			</if>
+			<if test=" version != null">
+				VERSION = #{version},
+			</if>
+			<if test=" tabIndex != null">
+				TABINDEX = #{tabIndex},
+			</if>
+			<if test=" mtId != null">
+				MT_ID = #{mtId},
+			</if>
+			<if test=" mstId != null">
+				MST_ID = #{mstId},
+			</if>
+			<if test=" jdeId != null">
+				JDE_ID = #{jdeId},
+			</if>
+			<if test=" auditstate != null">
+				AUDITSTATE = #{auditstate},
+			</if>
+		</set>
+		WHERE DB_ID = #{dbId}
+	</update>
+
+	<!-- delete -->
+	<delete id="delete" parameterType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		DELETE FROM cms_pgy_mt_mst_jde WHERE DB_ID IN
+		<foreach item="dbid" index="index" collection="dbIds" open="("
+			separator="," close=")">
+			#{dbid}
+		</foreach>
+	</delete>
+
+	<sql id="selectAllColumns">
+		TB.CREATED_BY AS createdBy,
+		TB.CREATED_DT AS createdDt,
+		TB.UPDATED_BY AS updatedBy,
+		TB.UPDATED_DT AS updatedDt,
+		TB.VERSION AS
+		version,
+		TB.TABINDEX AS tabIndex,
+		TB.DB_ID AS dbId,
+		TB.MT_ID AS mtId,
+		TB.MST_ID AS mstId,
+		TB.JDE_ID AS jdeId,
+		TB.AUDITSTATE AS auditstate
+	</sql>
+
+	<sql id="queryWhereWithPage">
+		<if test=" queryParam.createdBy != null">
+			and TB.CREATED_BY = #{queryParam.createdBy}
+		</if>
+		<if test=" queryParam.createdDt != null">
+			and TB.CREATED_DT = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.updatedBy != null">
+			and TB.UPDATED_BY = #{queryParam.updatedBy}
+		</if>
+		<if test=" queryParam.updatedDt != null">
+			and TB.UPDATED_DT = #{queryParam.updatedDt}
+		</if>
+		<if test=" queryParam.version != null">
+			and TB.VERSION = #{queryParam.version}
+		</if>
+		<if test=" queryParam.tabIndex != null">
+			and TB.TABINDEX = #{queryParam.tabIndex}
+		</if>
+		<if test=" queryParam.dbId != null">
+			and TB.DB_ID = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.mtId != null">
+			and TB.MT_ID = #{queryParam.mtId}
+		</if>
+		<if test=" queryParam.mstId != null">
+			and TB.MST_ID = #{queryParam.mstId}
+		</if>
+		<if test=" queryParam.jdeId != null">
+			and TB.JDE_ID = #{queryParam.jdeId}
+		</if>
+		<if test=" queryParam.auditstate != null">
+			and TB.AUDITSTATE = #{queryParam.auditstate}
+		</if>
+		<if
+			test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+			and TB.DB_ID IN
+			<foreach item="dbid" index="index" collection="queryParam.dbIds"
+				open="(" separator="," close=")">
+				#{dbid}
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel"
+		resultType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_mst_jde TB
+		WHERE 1=1
+		<include refid="queryWhereWithPage" />
+	</select>
+
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel"
+		resultType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_mst_jde TB
+		WHERE 1=1
+		<include refid="queryWhereWithPage" />
+	</select>
+
+	<sql id="queryWhereWithEntity">
+		<if test="createdBy != null">
+			and TB.CREATED_BY = #{createdBy}
+		</if>
+		<if test="createdDt != null">
+			and TB.CREATED_DT = #{createdDt}
+		</if>
+		<if test="updatedBy != null">
+			and TB.UPDATED_BY = #{updatedBy}
+		</if>
+		<if test="updatedDt != null">
+			and TB.UPDATED_DT = #{updatedDt}
+		</if>
+		<if test="version != null">
+			and TB.VERSION = #{version}
+		</if>
+		<if test="tabIndex != null">
+			and TB.TABINDEX = #{tabIndex}
+		</if>
+		<if test="dbId != null">
+			and TB.DB_ID = #{dbId}
+		</if>
+		<if test="mtId != null">
+			and TB.MT_ID = #{mtId}
+		</if>
+		<if test="mstId != null">
+			and TB.MST_ID = #{mstId}
+		</if>
+		<if test="jdeId != null">
+			and TB.JDE_ID = #{jdeId}
+		</if>
+		<if test="auditstate != null">
+			and TB.AUDITSTATE = #{auditstate}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+			and TB.DB_ID IN
+			<foreach item="dbid" index="index" collection="dbIds" open="("
+				separator="," close=")">
+				#{dbid}
+			</foreach>
+		</if>
+	</sql>
+
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity"
+		resultType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_mst_jde TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity"
+		resultType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_mst_jde TB
+		WHERE 1=1
+		<include refid="queryWhereWithEntity" />
+	</select>
+
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String"
+		resultType="net.artron.cms.pgymtmstjde.model.Pgymtmstjde">
+		SELECT
+		<include refid="selectAllColumns" />
+		FROM cms_pgy_mt_mst_jde TB
+		WHERE TB.DB_ID = #{dbId}
+	</select>
+
+	<!-- 批量添加 -->
+	<insert id="batchInsert" parameterType="java.util.List">
+		INSERT INTO cms_pgy_mt_mst_jde
+		(
+		CREATED_BY,
+		CREATED_DT,
+		UPDATED_BY,
+		UPDATED_DT,
+		VERSION,
+		TABINDEX,
+		DB_ID,
+		MT_ID,
+		MST_ID,
+		JDE_ID,
+		AUDITSTATE
+		)
+		VALUES
+		<foreach collection="list" index="index" item="item"
+			separator=",">
+			(
+			#{item.createdBy, jdbcType=VARCHAR},
+			#{item.createdDt,
+			jdbcType=TIMESTAMP},
+			#{item.updatedBy, jdbcType=VARCHAR},
+			#{item.updatedDt, jdbcType=VARCHAR},
+			#{item.version,
+			jdbcType=INTEGER},
+			#{item.tabIndex, jdbcType=INTEGER},
+			#{item.dbId,
+			jdbcType=VARCHAR},
+			#{item.mtId, jdbcType=VARCHAR},
+			#{item.mstId,
+			jdbcType=VARCHAR},
+			#{item.jdeId, jdbcType=VARCHAR},
+			#{item.auditstate,
+			jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
+	<select id="queryBfbByMtid" parameterType="String"
+		resultType="net.artron.cms.pgymtmstjde.model.JudgeRatio">
+		SELECT tt.db_id as dbId,tt.img_url as
+		imgUrl,tt.`name`,tt.allcount,tt.yishenhe, (CASE WHEN
+		tt.yishenhe =
+		tt.allcount THEN '已完成' ELSE
+		concat (CAST( left (tt.yishenhe /
+		tt.allcount *100,5)as SIGNED ),'%')
+		END) AS bfb from (
+		SELECT r.db_id,
+		r.img_url, r.`name`, COUNT(jde.DB_ID) AS allcount, (SELECT
+		COUNT(t.db_id) from CMS_PGY_MT_MST_JDE t WHERE t.AUDITSTATE>0 AND
+		t.MT_ID=jde.MT_ID AND t.JDE_ID= r.db_id ) as yishenhe
+		FROM
+		CMS_PGY_MT_MST_JDE jde, cms_pgy_rater r WHERE r.db_id = jde.JDE_ID
+		AND
+		jde.MT_ID = #{mtid} GROUP BY jde.JDE_ID ) as tt
+	</select>
+
+	<select id="queryStatisticsByMtid" parameterType="String"
+		resultMap="ReviewS">
+		SELECT DISTINCT MT_ID,MST_ID from
+		CMS_PGY_MT_MST_JDE WHERE
+		MT_ID =
+		#{mtid}
+	</select>
+	<select id="findStatistics" parameterType="java.util.Map"
+		resultMap="StatisticsMap">
+		SELECT JDE_ID,AUDITSTATE from
+		CMS_PGY_MT_MST_JDE WHERE MT_ID
+		= #{mt_id}
+		and MST_ID=#{mst_id}
+	</select>
+	<resultMap id="ReviewS"
+		type="net.artron.cms.pgymtmstjde.model.ReviewStatistics">
+		<result property="mt_id" column="mt_id" />
+		<result property="mst_id" column="mst_id" />
+		<collection property="statistics" column="{mt_id=mt_id,mst_id=mst_id}"
+			javaType="ArrayList" ofType="net.artron.cms.pgymtmstjde.model.Statistics"
+			select="findStatistics" />
+	</resultMap>
+	 
+	<resultMap type="net.artron.cms.pgymtmstjde.model.Statistics"
+		id="StatisticsMap">
+		<result property="jde_id" column="jde_id" />
+		<result property="auditstate" column="auditstate" />
+	</resultMap>
+
+	<select id="queryRaterMstByPage" parameterType="PageModel"
+		resultType="net.artron.cms.pgymtmstjde.model.RaterMst">
+		SELECT TB.DB_ID as dbId,TB.MT_ID as mtid,TB.JDE_ID as
+		jdeid,TB.AUDITSTATE as auditstate,mst.db_id as
+		mstid,mst.name,mst.author,mst.details,mst.mt_gp_id as mtgpid
+		,mst.msttype,mst.channel,mst.photourl 
+		from
+		CMS_PGY_MT_MST_JDE TB
+		,(SELECT t.*,pt.photourl from
+		cms_pgy_manuscript t ,cms_pgy_mst_photo
+		pt
+		WHERE 1=1
+		<if test="queryParam.mtgpid != null and queryParam.mtgpid != '' ">
+			and t.MT_GP_ID =#{queryParam.mtgpid}
+		</if>
+		AND pt.mst_id=t.DB_ID AND pt.tabindex= (SELECT MIN(TABINDEX) from
+		cms_pgy_mst_photo WHERE MST_ID=t.DB_ID)) mst
+		WHERE TB.MST_ID=mst.db_id
+		AND TB.MT_ID= #{queryParam.mtid}
+		and TB.JDE_ID=#{queryParam.jdeid}
+		<if test="queryParam.tab != null and queryParam.tab != '' ">
+		and TB.AUDITSTATE=#{queryParam.tab}
+		</if> 
+	</select>
+
+	<select id="queryCount" parameterType="Map"
+		resultType="net.artron.cms.pgymtmstjde.model.PendingCount">
+		<if test="mtgpid == null or mtgpid == '' ">
+			SELECT
+			( SELECT COUNT(DB_ID) from cms_pgy_mt_mst_jde WHERE JDE_ID=#{jdeid}
+			and
+			MT_ID=#{mtid} AND AUDITSTATE=0) as dscount,
+			( SELECT COUNT(DB_ID) from cms_pgy_mt_mst_jde WHERE JDE_ID=#{jdeid}
+			and
+			MT_ID=#{mtid} AND AUDITSTATE=1) as tgcount,
+			(SELECT COUNT(DB_ID) from cms_pgy_mt_mst_jde WHERE JDE_ID=#{jdeid} and
+			MT_ID=#{mtid} AND AUDITSTATE=2) as wtgcount
+		</if>
+		<if test="mtgpid != null and mtgpid != '' ">
+			SELECT
+			( SELECT COUNT(jde.DB_ID) from cms_pgy_mt_mst_jde jde,
+			cms_pgy_manuscript mst WHERE jde.mst_id=mst.db_id and
+			jde.JDE_ID=#{jdeid} AND jde.MT_ID=#{mtid} AND mst.mt_gp_id=#{mtgpid}
+			AND AUDITSTATE=0) as dscount,
+			( SELECT COUNT(jde.DB_ID) from cms_pgy_mt_mst_jde jde,
+			cms_pgy_manuscript mst WHERE jde.mst_id=mst.db_id and
+			jde.JDE_ID=#{jdeid} AND jde.MT_ID=#{mtid} AND mst.mt_gp_id=#{mtgpid}
+			AUDITSTATE=1) as tgcount,
+			(SELECT COUNT(jde.DB_ID) from cms_pgy_mt_mst_jde jde, cms_pgy_manuscript mst
+			WHERE jde.mst_id=mst.db_id and
+			jde.JDE_ID=#{jdeid} AND jde.MT_ID=#{mtid} AND mst.mt_gp_id=#{mtgpid} AND AUDITSTATE=2)
+			as wtgcount
+		</if>
+	</select>
+
+</mapper>

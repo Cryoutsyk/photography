@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  
+<mapper namespace="net.artron.cms.pgyhostunit.mapper.PgyhostunitMapper">
+
+ 	<!-- save -->
+ 	<insert id="save" parameterType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+		INSERT INTO cms_pgy_host_unit
+		(
+			db_id,
+			company_name,
+			name,
+			telphone,
+			email,
+			address,
+			account_number,
+			password,
+			remarks,
+			status,
+			created_dt,
+			version,
+			tab_index,
+			code
+		) 
+		VALUES 
+		( 
+			#{dbId, jdbcType=VARCHAR},
+			#{companyName, jdbcType=VARCHAR},
+			#{name, jdbcType=VARCHAR},
+			#{telphone, jdbcType=VARCHAR},
+			#{email, jdbcType=VARCHAR},
+			#{address, jdbcType=VARCHAR},
+			#{accountNumber, jdbcType=VARCHAR},
+			#{password, jdbcType=VARCHAR},
+			#{remarks, jdbcType=VARCHAR},
+			#{status, jdbcType=VARCHAR},
+			#{createdDt, jdbcType=TIMESTAMP},
+			#{version, jdbcType=VARCHAR},
+			#{tabIndex, jdbcType=INTEGER},
+			#{code, jdbcType=VARCHAR}
+		) 
+	</insert>
+	
+	<!-- update -->
+	<update id="update" parameterType="net.artron.cms.pgyhostunit.model.Pgyhostunit" >
+     	UPDATE cms_pgy_host_unit
+			<set> 
+				<if test=" companyName != null" > 
+					company_name = #{companyName}, 
+				</if>
+				<if test=" name != null" > 
+					name = #{name}, 
+				</if>
+				<if test=" telphone != null" > 
+					telphone = #{telphone}, 
+				</if>
+				<if test=" email != null" > 
+					email = #{email}, 
+				</if>
+				<if test=" address != null" > 
+					address = #{address}, 
+				</if>
+				<if test=" accountNumber != null" > 
+					account_number = #{accountNumber}, 
+				</if>
+				<if test=" password != null" > 
+					password = #{password}, 
+				</if>
+				<if test=" remarks != null" > 
+					remarks = #{remarks}, 
+				</if>
+				<if test=" status != null" > 
+					status = #{status}, 
+				</if>
+				<if test=" createdDt != null" > 
+					created_dt = #{createdDt}, 
+				</if>
+				<if test=" version != null" > 
+					version = #{version}, 
+				</if>
+				<if test=" tabIndex != null" > 
+					tab_index = #{tabIndex}, 
+				</if>
+				<if test=" code != null" > 
+					code = #{code}, 
+				</if>
+			</set> 
+		 WHERE  db_id = #{dbId}
+  	</update>
+  	
+  	<!-- delete -->
+ 	<delete id="delete" parameterType="net.artron.cms.pgyhostunit.model.Pgyhostunit" >
+            DELETE FROM cms_pgy_host_unit WHERE db_id IN
+            <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    		#{dbid}
+		  	</foreach> 
+  	</delete>
+  	
+  	<sql id="selectAllColumns">
+		TB.db_id AS dbId,  
+		TB.company_name AS companyName,  
+		TB.name AS name,  
+		TB.telphone AS telphone,  
+		TB.email AS email,  
+		TB.address AS address,  
+		TB.account_number AS accountNumber,  
+		TB.password AS password,  
+		TB.remarks AS remarks,  
+		TB.status AS status,  
+		TB.created_dt AS createdDt,  
+		TB.version AS version,  
+		TB.tab_index AS tabIndex,
+		LPAD(TB.code, 4, 0) AS code
+  	</sql>
+  	
+  	<sql id="queryWhereWithPage">
+		<if test=" queryParam.dbId != null" > 
+		and TB.db_id = #{queryParam.dbId}
+		</if>
+		<if test=" queryParam.companyName != null" > 
+		AND CONCAT(TB.company_name,TB.telphone,TB.name) LIKE '%' #{queryParam.companyName} '%'
+		</if>
+		<if test=" queryParam.name != null" > 
+		and TB.name = #{queryParam.name}
+		</if>
+		<if test=" queryParam.telphone != null" > 
+		and TB.telphone = #{queryParam.telphone}
+		</if>
+		<if test=" queryParam.email != null" > 
+		and TB.email = #{queryParam.email}
+		</if>
+		<if test=" queryParam.address != null" > 
+		and TB.address = #{queryParam.address}
+		</if>
+		<if test=" queryParam.accountNumber != null" > 
+		and TB.account_number = #{queryParam.accountNumber}
+		</if>
+		<if test=" queryParam.password != null" > 
+		and TB.password = #{queryParam.password}
+		</if>
+		<if test=" queryParam.remarks != null" > 
+		and TB.remarks = #{queryParam.remarks}
+		</if>
+		<if test=" queryParam.status != null" > 
+		and TB.status = #{queryParam.status}
+		</if>
+		<if test=" queryParam.createdDt != null" > 
+		and TB.created_dt = #{queryParam.createdDt}
+		</if>
+		<if test=" queryParam.code != null" > 
+		and TB.code = #{queryParam.code}
+		</if>
+		<if test="queryParam.dbIds != null &amp;&amp; queryParam.dbIds.size() &gt; 0">
+		and TB.db_id IN
+		  <foreach item="dbid" index="index" collection="queryParam.dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if> 
+  	</sql>
+  	
+  	<!-- query page by page -->
+	<select id="queryByPage" parameterType="PageModel" resultType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_host_unit TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+  		 ORDER BY TB.created_dt DESC
+	</select>
+	
+	<!-- queryPageWithAuth -->
+	<select id="queryPageWithAuth" parameterType="PageModel" resultType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+		SELECT
+			<include refid="selectAllColumns" />  
+		FROM cms_pgy_host_unit TB  
+    	WHERE 1=1   
+    		 <include refid="queryWhereWithPage" />
+	</select> 
+	
+	<sql id="queryWhereWithEntity">
+		<if test="dbId != null" > 
+		and TB.db_id = #{dbId}
+		</if>
+		<if test="companyName != null" > 
+		and TB.company_name = #{companyName}
+		</if>
+		<if test="name != null" > 
+		and TB.name = #{name}
+		</if>
+		<if test="telphone != null" > 
+		and TB.telphone = #{telphone}
+		</if>
+		<if test="email != null" > 
+		and TB.email = #{email}
+		</if>
+		<if test="address != null" > 
+		and TB.address = #{address}
+		</if>
+		<if test="accountNumber != null" > 
+		and TB.account_number = #{accountNumber}
+		</if>
+		<if test="password != null" > 
+		and TB.password = #{password}
+		</if>
+		<if test="remarks != null" > 
+		and TB.remarks = #{remarks}
+		</if>
+		<if test="status != null" > 
+		and TB.status = #{status}
+		</if>
+		<if test="createDt != null" > 
+		and TB.created_dt = #{createdDt}
+		</if>
+		<if test="version != null" > 
+		and TB.version = #{version}
+		</if>
+		<if test="code != null" > 
+		and TB.code = #{code}
+		</if>
+		<if test="dbIds != null &amp;&amp; dbIds.size() &gt; 0">
+		and TB.db_id IN
+		  <foreach item="dbid" index="index" collection="dbIds" open="(" separator="," close=")">
+		    #{dbid}
+		  </foreach> 
+		</if>  
+	</sql>
+	
+	<!-- query all -->
+	<select id="queryAll" parameterType="Entity" resultType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_host_unit TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	 
+	 <!-- queryWithAuth -->
+	<select id="queryWithAuth" parameterType="Entity" resultType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+	 SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_host_unit TB 
+	  WHERE 1=1   
+    	<include refid="queryWhereWithEntity" />
+	 </select>
+	
+	<!-- query by id -->
+	<select id="queryById" parameterType="java.lang.String" resultType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+	  SELECT
+		<include refid="selectAllColumns" /> 
+	  FROM cms_pgy_host_unit TB  
+          WHERE  TB.db_id = #{dbId}
+	</select>  
+	
+	<select id="getunit" parameterType="Entity" resultType="net.artron.cms.pgyhostunit.model.Pgyhostunit">
+	SELECT 
+	<include refid="selectAllColumns" />
+	FROM cms_pgy_host_unit TB 
+	WHERE 1=1 
+	AND TB.ACCOUNT_NUMBER = #{accountNumber}
+	AND TB.PASSWORD = #{password}
+	</select>
+		
+</mapper>

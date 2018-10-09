@@ -1,0 +1,12 @@
+<<<<<<< .mine
+=======
+net\artron\core\mttextupdate.class
+net\artron\core\matchadd.class
+net\artron\core\mttextadd.class
+>>>>>>> .r1544
+net\artron\core\matchquery.class
+net\artron\core\SpringContextApplicationTest.class
+net\artron\core\matchFile.class
+net\artron\core\tool\CodeGeneratorTest.class
+net\artron\core\matchupdate.class
+net\artron\core\removeobjtest.class
